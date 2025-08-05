@@ -5,7 +5,7 @@ import DCInputForm from './DCInputForm';
 import DCTable from './DCTable';
 import DCReport from './DCReport';
 
-const Version = "v0 .1.0";
+const Version = "v0.1.1";
 
 // Helper to get today's date in YYYY-MM-DD format
 const getToday = () => {

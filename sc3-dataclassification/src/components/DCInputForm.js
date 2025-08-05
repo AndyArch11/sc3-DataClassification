@@ -3542,7 +3542,7 @@ const DCInputForm = ({
                   <tr>
                     <td colSpan="2">
                       <fieldset className="dc-fieldset dc-fieldset-modern-data-security">
-                        <legend className="dc-fieldset dc-fieldset-modern-data-security">🤖 Modern Data Security & Automation</legend>
+                        <legend className="dc-legend dc-legend-modern-data-security">🤖 Modern Data Security & Automation</legend>
                         <table className="dc-field-table">
                           <tbody>
                             <tr>
