@@ -642,6 +642,12 @@
   width: 30%;
 }
 
+.dc-form-label {
+  font-weight: 600;
+  color: var(--sc3-primary);
+  font-size: 0.9rem;
+}
+
 /* Required field indicator */
 .dc-required {
   color: var(--sc3-error);

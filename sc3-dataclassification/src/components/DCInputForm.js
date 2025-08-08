@@ -688,214 +688,214 @@ const DCInputForm = ({
                 <tbody>
                     <tr>   
                     <td className="dc-field-cell-label">
-                      <label>Asset Name:<span className="dc-required">*</span></label>
+                      <label className="dc-form-label">Asset Name:<span className="dc-required">*</span></label>
                     </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  id="assetName"
-                                  name="assetName"
-                                  value={form.assetName}
-                                  onChange={handleChange}
-                                  placeholder="Enter the name of the data asset"
-                                  required
-                                  className="dc-input"
-                                />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="dc-field-cell-label">
-                                <label>Asset Type:<span className="dc-required">*</span></label>
-                              </td>
-                              <td>
-                                <select
-                                  id="assetType"
-                                  name="assetType"
-                                  value={form.assetType}
-                                  onChange={handleChange}
-                                  required
-                                  className="dc-select"
-                                >
-                                  <option value="">Select asset type...</option>
-                                  {assetTypes.map(type => (
-                                    <option key={type.value} value={type.value}>
-                                      {type.label}
-                                    </option>
-                                  ))}
-                                </select>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="dc-field-cell-label">
-                                <label>Data Type:<span className="dc-required">*</span></label>
-                              </td>
-                              <td>
-                                <select
-                                  id="dataType"
-                                  name="dataType"
-                                  value={form.dataType}
-                                  onChange={handleChange}
-                                  required
-                                  className="dc-select"
-                                >
-                                  <option value="">Select data type...</option>
-                                  {dataTypes.map(type => (
-                                    <option key={type.value} value={type.value}>
-                                      {type.label}
-                                    </option>
-                                  ))}
-                                </select>
-                                <small className="dc-field-hint">
-                                  Select the primary type of data contained in this asset. Choose 'Mixed Data Types' if multiple types apply.
-                                </small>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="dc-field-cell-label">
-                                <label>Data Classification:<span className="dc-required">*</span></label>
-                              </td>
-                              <td>
-                                <select
-                                  id="dataClassification"
-                                  name="dataClassification"
-                                  value={form.dataClassification}
-                                  onChange={handleChange}
-                                  required
-                                  className={`dc-select ${form.dataClassification ? `dc-classification-${form.dataClassification}` : ''}`}
-                                >
-                                  <option value="">Select classification...</option>
-                                  {dataClassifications.map(classification => (
-                                    <option key={classification.value} value={classification.value}>
-                                      {classification.label} ({classification.risk} Risk)
-                                    </option>
-                                  ))}
-                                </select>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="dc-field-cell-label">
-                                <label>Asset Description:</label>
-                              </td>
-                              <td>
-                                <textarea
-                                  id="description"
-                                  name="description"
-                                  value={form.description}
-                                  onChange={handleChange}
-                                  placeholder="Describe the data asset, its purpose, and contents"
-                                  rows="3"
-                                  className="dc-textarea"
-                                />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="dc-field-cell-label">
-                                <label>System & Process Dependencies:</label>
-                              </td>
-                              <td>
-                                <textarea
-                                  id="dependencies"
-                                  name="dependencies"
-                                  value={form.dependencies}
-                                  onChange={handleChange}
-                                  placeholder="List systems, applications, processes, or workflows that depend on this data asset (e.g., CRM system, monthly reporting process, API integrations)"
-                                  rows="3"
-                                  className="dc-textarea"
-                                />
-                                <small className="dc-field-hint">
-                                  Identify downstream systems, business processes, and workflows that would be impacted if this data asset becomes unavailable or compromised
-                                </small>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="dc-field-cell-label">
-                                <label>Data Owner:</label>
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  id="dataOwner"
-                                  name="dataOwner"
-                                  value={form.dataOwner}
-                                  onChange={handleChange}
-                                  placeholder="Business owner responsible for the data"
-                                  className="dc-input"
-                                />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="dc-field-cell-label">
-                                <label>Technical Owner:</label>
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  id="technicalOwner"
-                                  name="technicalOwner"
-                                  value={form.technicalOwner}
-                                  onChange={handleChange}
-                                  placeholder="Technical contact for implementation and support"
-                                  className="dc-input"
-                                />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="dc-field-cell-label">
-                                <label>Assessment Conducted By:<span className="dc-required">*</span></label>
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  id="assessorName"
-                                  name="assessorName"
-                                  value={form.assessorName}
-                                  onChange={handleChange}
-                                  placeholder="Name of person conducting this data classification assessment"
-                                  required
-                                  className="dc-input"
-                                />
-                                <small className="dc-field-hint">
-                                  Enter the full name of the person responsible for this data classification assessment
-                                </small>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="dc-field-cell-label">
-                                <label>Assessment Date:<span className="dc-required">*</span></label>
-                              </td>
-                              <td>
-                                <input
-                                  type="date"
-                                  id="assessmentDate"
-                                  name="assessmentDate"
-                                  value={form.assessmentDate}
-                                  onChange={handleChange}
-                                  required
-                                  className="dc-input-date"
-                                />
-                                <small className="dc-field-hint">
-                                  Date when this data classification assessment was conducted
-                                </small>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td className="dc-field-cell-label">
-                                <label>Next Review Date:</label>
-                              </td>
-                              <td>
-                                <input
-                                  type="date"
-                                  id="reviewDate"
-                                  name="reviewDate"
-                                  value={form.reviewDate}
-                                  onChange={handleChange}
-                                  className="dc-input-date"
-                                />
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </fieldset>
+                    <td>
+                      <input
+                        type="text"
+                        id="assetName"
+                        name="assetName"
+                        value={form.assetName}
+                        onChange={handleChange}
+                        placeholder="Enter the name of the data asset"
+                        required
+                        className="dc-input"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="dc-field-cell-label">
+                      <label className="dc-form-label">Asset Type:<span className="dc-required">*</span></label>
+                    </td>
+                    <td>
+                      <select
+                        id="assetType"
+                        name="assetType"
+                        value={form.assetType}
+                        onChange={handleChange}
+                        required
+                        className="dc-select"
+                      >
+                        <option value="">Select asset type...</option>
+                        {assetTypes.map(type => (
+                          <option key={type.value} value={type.value}>
+                            {type.label}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="dc-field-cell-label">
+                      <label className="dc-form-label">Data Type:<span className="dc-required">*</span></label>
+                    </td>
+                    <td>
+                      <select
+                        id="dataType"
+                        name="dataType"
+                        value={form.dataType}
+                        onChange={handleChange}
+                        required
+                        className="dc-select"
+                      >
+                        <option value="">Select data type...</option>
+                        {dataTypes.map(type => (
+                          <option key={type.value} value={type.value}>
+                            {type.label}
+                          </option>
+                        ))}
+                      </select>
+                      <small className="dc-field-hint">
+                        Select the primary type of data contained in this asset. Choose 'Mixed Data Types' if multiple types apply.
+                      </small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="dc-field-cell-label">
+                      <label className="dc-form-label">Data Classification:<span className="dc-required">*</span></label>
+                    </td>
+                    <td>
+                      <select
+                        id="dataClassification"
+                        name="dataClassification"
+                        value={form.dataClassification}
+                        onChange={handleChange}
+                        required
+                        className={`dc-select ${form.dataClassification ? `dc-classification-${form.dataClassification}` : ''}`}
+                      >
+                        <option value="">Select classification...</option>
+                        {dataClassifications.map(classification => (
+                          <option key={classification.value} value={classification.value}>
+                            {classification.label} ({classification.risk} Risk)
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="dc-field-cell-label">
+                      <label className="dc-form-label">Asset Description:</label>
+                    </td>
+                    <td>
+                      <textarea
+                        id="description"
+                        name="description"
+                        value={form.description}
+                        onChange={handleChange}
+                        placeholder="Describe the data asset, its purpose, and contents"
+                        rows="3"
+                        className="dc-textarea"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="dc-field-cell-label">
+                      <label className="dc-form-label">System & Process Dependencies:</label>
+                    </td>
+                    <td>
+                      <textarea
+                        id="dependencies"
+                        name="dependencies"
+                        value={form.dependencies}
+                        onChange={handleChange}
+                        placeholder="List systems, applications, processes, or workflows that depend on this data asset (e.g., CRM system, monthly reporting process, API integrations)"
+                        rows="3"
+                        className="dc-textarea"
+                      />
+                      <small className="dc-field-hint">
+                        Identify downstream systems, business processes, and workflows that would be impacted if this data asset becomes unavailable or compromised
+                      </small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="dc-field-cell-label">
+                      <label className="dc-form-label">Data Owner:</label>
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        id="dataOwner"
+                        name="dataOwner"
+                        value={form.dataOwner}
+                        onChange={handleChange}
+                        placeholder="Business owner responsible for the data"
+                        className="dc-input"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="dc-field-cell-label">
+                      <label className="dc-form-label">Technical Owner:</label>
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        id="technicalOwner"
+                        name="technicalOwner"
+                        value={form.technicalOwner}
+                        onChange={handleChange}
+                        placeholder="Technical contact for implementation and support"
+                        className="dc-input"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="dc-field-cell-label">
+                      <label className="dc-form-label">Assessment Conducted By:<span className="dc-required">*</span></label>
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        id="assessorName"
+                        name="assessorName"
+                        value={form.assessorName}
+                        onChange={handleChange}
+                        placeholder="Name of person conducting this data classification assessment"
+                        required
+                        className="dc-input"
+                      />
+                      <small className="dc-field-hint">
+                        Enter the full name of the person responsible for this data classification assessment
+                      </small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="dc-field-cell-label">
+                      <label className="dc-form-label">Assessment Date:<span className="dc-required">*</span></label>
+                    </td>
+                    <td>
+                      <input
+                        type="date"
+                        id="assessmentDate"
+                        name="assessmentDate"
+                        value={form.assessmentDate}
+                        onChange={handleChange}
+                        required
+                        className="dc-input-date"
+                      />
+                      <small className="dc-field-hint">
+                        Date when this data classification assessment was conducted
+                      </small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="dc-field-cell-label">
+                      <label className="dc-form-label">Next Review Date:</label>
+                    </td>
+                    <td>
+                      <input
+                        type="date"
+                        id="reviewDate"
+                        name="reviewDate"
+                        value={form.reviewDate}
+                        onChange={handleChange}
+                        className="dc-input-date"
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </fieldset>
 
             {/* Extended Data Classification Assessment - Collapsible */}
             <details open={extendedFieldsOpen} onToggle={e => { e.stopPropagation(); setExtendedFieldsOpen(e.target.open); }}>          
@@ -911,7 +911,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data at Rest Encryption:</label>
+                                <label className="dc-form-label">Data at Rest Encryption:</label>
                               </td>
                               <td>
                                 <select
@@ -949,7 +949,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data in Transit Encryption:</label>
+                                <label className="dc-form-label">Data in Transit Encryption:</label>
                               </td>
                               <td>
                                 <select
@@ -987,7 +987,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Database Encryption & Data Protection:</label>
+                                <label className="dc-form-label">Database Encryption & Data Protection:</label>
                               </td>
                               <td>
                                 <select
@@ -1036,7 +1036,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Encryption Cipher:</label>
+                                <label className="dc-form-label">Encryption Cipher:</label>
                               </td>
                               <td>
                                 <select
@@ -1073,7 +1073,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Hash Algorithm:</label>
+                                <label className="dc-form-label">Hash Algorithm:</label>
                               </td>
                               <td>
                                 <select
@@ -1109,7 +1109,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Key Management:</label>
+                                <label className="dc-form-label">Key Management:</label>
                               </td>
                               <td>
                                 <select
@@ -1142,7 +1142,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Authentication Method:</label>
+                                <label className="dc-form-label">Authentication Method:</label>
                               </td>
                               <td>
                                 <select
@@ -1180,7 +1180,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Authorisation Model:</label>
+                                <label className="dc-form-label">Authorisation Model:</label>
                               </td>
                               <td>
                                 <select
@@ -1217,7 +1217,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Identity Management & Access Patterns:</label>
+                                <label className="dc-form-label">Identity Management & Access Patterns:</label>
                               </td>
                               <td>
                                 <select
@@ -1263,7 +1263,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Specific Access Controls:</label>
+                                <label className="dc-form-label">Specific Access Controls:</label>
                               </td>
                               <td>
                                 <textarea
@@ -1292,7 +1292,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Web Application Firewall (WAF) - Ingress Protection:</label>
+                                <label className="dc-form-label">Web Application Firewall (WAF) - Ingress Protection:</label>
                               </td>
                               <td>
                                 <select
@@ -1323,7 +1323,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Loss Prevention (DLP) - Egress Protection:</label>
+                                <label className="dc-form-label">Data Loss Prevention (DLP) - Egress Protection:</label>
                               </td>
                               <td>
                                 <select
@@ -1355,7 +1355,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Cloud Access Security Broker (CASB) - Cloud Egress</label>
+                                <label className="dc-form-label">Cloud Access Security Broker (CASB) - Cloud Egress</label>
                               </td>
                               <td>
                                 <select
@@ -1386,7 +1386,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Security Service Edge (SSE) - Cloud Egress</label>
+                                <label className="dc-form-label">Security Service Edge (SSE) - Cloud Egress</label>
                               </td>
                               <td>
                                 <select
@@ -1418,7 +1418,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Cloud Network Security</label>
+                                <label className="dc-form-label">Cloud Network Security</label>
                               </td>
                               <td>
                                 <select
@@ -1450,7 +1450,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>SD-WAN (Software-Defined Wide Area Network)</label>
+                                <label className="dc-form-label">SD-WAN (Software-Defined Wide Area Network)</label>
                               </td>
                               <td>
                                 <select
@@ -1484,7 +1484,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>SASE Architecture</label>
+                                <label className="dc-form-label">SASE Architecture</label>
                               </td>
                               <td>
                                 <select
@@ -1516,7 +1516,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Zero Trust Maturity</label>
+                                <label className="dc-form-label">Zero Trust Maturity</label>
                               </td>
                               <td>
                                 <select
@@ -1548,7 +1548,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Network Security Controls - All Protocols</label>
+                                <label className="dc-form-label">Network Security Controls - All Protocols</label>
                               </td>
                               <td>
                                 <select
@@ -1580,7 +1580,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Non-HTTP Protocol Coverage</label>
+                                <label className="dc-form-label">Non-HTTP Protocol Coverage</label>
                               </td>
                               <td>
                                 <select
@@ -1624,7 +1624,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Antivirus & Anti-malware:</label>
+                                <label className="dc-form-label">Antivirus & Anti-malware:</label>
                               </td>
                               <td>
                                 <select
@@ -1656,7 +1656,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Vulnerability Scanning</label>
+                                <label className="dc-form-label">Vulnerability Scanning</label>
                               </td>
                               <td>
                                 <select
@@ -1688,7 +1688,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Certificate Lifecycle Management</label>
+                                <label className="dc-form-label">Certificate Lifecycle Management</label>
                               </td>
                               <td>
                                 <select
@@ -1720,7 +1720,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                                 <td className="dc-field-cell-label">
-                                  <label>Application Control Software</label>
+                                  <label className="dc-form-label">Application Control Software</label>
                                 </td>
                                 <td>
                                   <select
@@ -1752,7 +1752,7 @@ const DCInputForm = ({
                           </tr>
                           <tr>
                               <td className="dc-field-cell-label">
-                                  <label>Patch Management</label>
+                                  <label className="dc-form-label">Patch Management</label>
                               </td>
                               <td>
                                   <select
@@ -1784,7 +1784,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                  <label>Code Integrity & Signing</label>
+                                  <label className="dc-form-label">Code Integrity & Signing</label>
                               </td>
                               <td>
                                   <select
@@ -1816,7 +1816,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                  <label>OS Hardening & Configuration</label>
+                                  <label className="dc-form-label">OS Hardening & Configuration</label>
                               </td>
                               <td>
                                   <select
@@ -1848,7 +1848,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                  <label>OS Encryption (VM-Aware)</label>
+                                  <label className="dc-form-label">OS Encryption (VM-Aware)</label>
                               </td>
                               <td>
                                   <select
@@ -1887,7 +1887,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Mobile Device Management (MDM)</label>
+                                <label className="dc-form-label">Mobile Device Management (MDM)</label>
                               </td>
                               <td>
                                 <select
@@ -1919,7 +1919,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Mobile Application Management (MAM)</label>
+                                <label className="dc-form-label">Mobile Application Management (MAM)</label>
                               </td>
                               <td>
                                 <select
@@ -1951,7 +1951,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>BYOD (Bring Your Own Device) Policy</label>
+                                <label className="dc-form-label">BYOD (Bring Your Own Device) Policy</label>
                               </td>
                               <td>
                                 <select
@@ -1983,7 +1983,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                  <label>Mobile Data Protection</label>
+                                  <label className="dc-form-label">Mobile Data Protection</label>
                               </td>
                               <td>
                                 <select
@@ -2028,7 +2028,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                  <label>Virtual Desktop Infrastructure (VDI)</label>
+                                  <label className="dc-form-label">Virtual Desktop Infrastructure (VDI)</label>
                               </td>
                               <td>
                                   <select
@@ -2064,7 +2064,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Jump Hosts / Bastion Hosts</label>
+                                <label className="dc-form-label">Jump Hosts / Bastion Hosts</label>
                               </td>
                               <td>
                                 <select
@@ -2097,7 +2097,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                  <label>Remote Access Policy</label>
+                                  <label className="dc-form-label">Remote Access Policy</label>
                               </td>
                               <td>
                                   <select
@@ -2130,7 +2130,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Session Isolation</label>
+                                <label className="dc-form-label">Session Isolation</label>
                               </td>
                               <td>
                                 <select
@@ -2163,7 +2163,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Remote Access Monitoring</label>
+                                <label className="dc-form-label">Remote Access Monitoring</label>
                               </td>
                               <td>
                               <select
@@ -2195,7 +2195,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Privileged Access Management (PAM)</label>
+                                <label className="dc-form-label">Privileged Access Management (PAM)</label>
                               </td>
                               <td>
                                 <select
@@ -2240,7 +2240,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Threat Monitoring (SecOps - C.I.A.):</label>
+                                <label className="dc-form-label">Threat Monitoring (SecOps - C.I.A.):</label>
                               </td>
                               <td>
                                 <select
@@ -2286,7 +2286,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Availability Monitoring (DevOps - A.):</label>
+                                <label className="dc-form-label">Availability Monitoring (DevOps - A.):</label>
                               </td>
                               <td>
                                 <select
@@ -2324,7 +2324,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Audit Logging</label>
+                                <label className="dc-form-label">Audit Logging</label>
                               </td>
                               <td>
                                 <select
@@ -2366,7 +2366,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Backup Strategy</label>
+                                <label className="dc-form-label">Backup Strategy</label>
                               </td>
                               <td>
                                 <select
@@ -2403,7 +2403,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Retention Period</label>
+                                <label className="dc-form-label">Data Retention Period</label>
                               </td>
                               <td>
                                 <select
@@ -2432,7 +2432,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Backup Retention Period</label>
+                                <label className="dc-form-label">Backup Retention Period</label>
                               </td>
                               <td>
                                 <select
@@ -2458,7 +2458,8 @@ const DCInputForm = ({
                               </td>
                             </tr>
                             <tr>
-                              <td className="dc-field-cell-label"><label>Archive Policy</label></td>
+                              <td className="dc-field-cell-label">
+                                <label className="dc-form-label">Archive Policy</label></td>
                               <td>
                                 <select
                                   id="archivePolicy"
@@ -2493,7 +2494,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Disposal Method</label>
+                                <label className="dc-form-label">Data Disposal Method</label>
                               </td>
                               <td>
                                 <select
@@ -2543,7 +2544,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Compliance Requirements</label>
+                                <label className="dc-form-label">Compliance Requirements</label>
                               </td>
                               <td>
                                 <textarea
@@ -2559,7 +2560,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Business Impact Level
+                                <label className="dc-form-label">Business Impact Level
                                   <small className="dc-field-hint">
                                     Reference your Business Impact Assessment (BIA) to determine impact level. If not available, use the following guidelines:
                                   </small>
@@ -2592,7 +2593,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Availability SLO</label>
+                                <label className="dc-form-label">Availability SLO</label>
                               </td>
                               <td>
                                 <select
@@ -2618,7 +2619,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Recovery Time Objective (RTO)</label>
+                                <label className="dc-form-label">Recovery Time Objective (RTO)</label>
                               </td>
                               <td>
                                 <select
@@ -2646,7 +2647,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Recovery Point Objective (RPO)</label>
+                                <label className="dc-form-label">Recovery Point Objective (RPO)</label>
                               </td>
                               <td>
                                 <select
@@ -2673,7 +2674,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Incident Response</label>
+                                <label className="dc-form-label">Incident Response</label>
                               </td>
                               <td>
                                 <select
@@ -2717,7 +2718,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Privacy by Design:</label>
+                                <label className="dc-form-label">Privacy by Design:</label>
                               </td>
                               <td>
                                 <select
@@ -2740,7 +2741,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Minimisation:</label>
+                                <label className="dc-form-label">Data Minimisation:</label>
                               </td>
                               <td>
                                 <select
@@ -2763,7 +2764,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>APP Data Collection Limitations:</label>
+                                <label className="dc-form-label">APP Data Collection Limitations:</label>
                               </td>
                               <td>
                                 <select
@@ -2786,7 +2787,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>APP Solicited vs Unsolicited Data:</label>
+                                <label className="dc-form-label">APP Solicited vs Unsolicited Data:</label>
                               </td>
                               <td>
                                 <select
@@ -2809,7 +2810,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>APP Collection Notice Requirements:</label>
+                                <label className="dc-form-label">APP Collection Notice Requirements:</label>
                               </td>
                               <td>
                                 <select
@@ -2832,7 +2833,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>APP Third Party Collection Controls:</label>
+                                <label className="dc-form-label">APP Third Party Collection Controls:</label>
                               </td>
                               <td>
                                 <select
@@ -2855,7 +2856,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Consent Management:</label>
+                                <label className="dc-form-label">Consent Management:</label>
                               </td>
                               <td>
                                 <select
@@ -2878,7 +2879,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>APP Customer Access Rights:</label>
+                                <label className="dc-form-label">APP Customer Access Rights:</label>
                               </td>
                               <td>
                                 <select
@@ -2901,7 +2902,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>APP Data Correction Rights:</label>
+                                <label className="dc-form-label">APP Data Correction Rights:</label>
                               </td>
                               <td>
                                 <select
@@ -2924,7 +2925,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>APP Data Retention & Disposal:</label>
+                                <label className="dc-form-label">APP Data Retention & Disposal:</label>
                               </td>
                               <td>
                                 <select
@@ -2947,7 +2948,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Right to Erasure (GDPR Art. 17):</label>
+                                <label className="dc-form-label">Right to Erasure (GDPR Art. 17):</label>
                               </td>
                               <td>
                                 <select
@@ -2970,7 +2971,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>APP Notification Requirements:</label>
+                                <label className="dc-form-label">APP Notification Requirements:</label>
                               </td>
                               <td>
                                 <select
@@ -2993,7 +2994,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Accessibility Compliance (DDA/WCAG):</label>
+                                <label className="dc-form-label">Accessibility Compliance (DDA/WCAG):</label>
                               </td>
                               <td>
                                 <select
@@ -3022,7 +3023,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Assistive Technology Support:</label>
+                                <label className="dc-form-label">Assistive Technology Support:</label>
                               </td>
                               <td>
                                 <select
@@ -3045,7 +3046,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Inclusive Data Access Design:</label>
+                                <label className="dc-form-label">Inclusive Data Access Design:</label>
                               </td>
                               <td>
                                 <select
@@ -3068,7 +3069,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Workplace Accessibility Accommodation:</label>
+                                <label className="dc-form-label">Workplace Accessibility Accommodation:</label>
                               </td>
                               <td>
                                 <select
@@ -3104,7 +3105,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Microsegmentation:</label>
+                                <label className="dc-form-label">Data Microsegmentation:</label>
                               </td>
                               <td>
                                 <select
@@ -3127,7 +3128,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Container Data Protection:</label>
+                                <label className="dc-form-label">Container Data Protection:</label>
                               </td>
                               <td>
                                 <select
@@ -3150,7 +3151,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Multi-Cloud Data Governance:</label>
+                                <label className="dc-form-label">Multi-Cloud Data Governance:</label>
                               </td>
                               <td>
                                 <select
@@ -3173,7 +3174,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Infrastructure as Code Security:</label>
+                                <label className="dc-form-label">Infrastructure as Code Security:</label>
                               </td>
                               <td>
                                 <select
@@ -3209,7 +3210,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Training Data Protection:</label>
+                                <label className="dc-form-label">Training Data Protection:</label>
                               </td>
                               <td>
                                 <select
@@ -3232,7 +3233,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>AI Governance:</label>
+                                <label className="dc-form-label">AI Governance:</label>
                               </td>
                               <td>
                                 <select
@@ -3255,7 +3256,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Third-Party Data Processing:</label>
+                                <label className="dc-form-label">Third-Party Data Processing:</label>
                               </td>
                               <td>
                                 <select
@@ -3278,7 +3279,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Supply Chain Data Mapping:</label>
+                                <label className="dc-form-label">Supply Chain Data Mapping:</label>
                               </td>
                               <td>
                                 <select
@@ -3314,7 +3315,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Insider Threat Detection:</label>
+                                <label className="dc-form-label">Insider Threat Detection:</label>
                               </td>
                               <td>
                                 <select
@@ -3337,7 +3338,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>UEBA for Data Operations:</label>
+                                <label className="dc-form-label">UEBA for Data Operations:</label>
                               </td>
                               <td>
                                 <select
@@ -3360,7 +3361,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Post-Quantum Cryptography:</label>
+                                <label className="dc-form-label">Post-Quantum Cryptography:</label>
                               </td>
                               <td>
                                 <select
@@ -3383,7 +3384,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Crypto-Agility Framework:</label>
+                                <label className="dc-form-label">Crypto-Agility Framework:</label>
                               </td>
                               <td>
                                 <select
@@ -3419,7 +3420,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Access Governance:</label>
+                                <label className="dc-form-label">Data Access Governance:</label>
                               </td>
                               <td>
                                 <select
@@ -3442,7 +3443,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Self-Service Data Access:</label>
+                                <label className="dc-form-label">Self-Service Data Access:</label>
                               </td>
                               <td>
                                 <select
@@ -3465,7 +3466,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Access Balancing:</label>
+                                <label className="dc-form-label">Data Access Balancing:</label>
                               </td>
                               <td>
                                 <select
@@ -3488,7 +3489,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Literacy Programs:</label>
+                                <label className="dc-form-label">Data Literacy Programs:</label>
                               </td>
                               <td>
                                 <select
@@ -3511,7 +3512,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Controlled Data Sharing:</label>
+                                <label className="dc-form-label">Controlled Data Sharing:</label>
                               </td>
                               <td>
                                 <select
@@ -3547,7 +3548,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Discovery & Automation:</label>
+                                <label className="dc-form-label">Data Discovery & Automation:</label>
                               </td>
                               <td>
                                 <select
@@ -3571,7 +3572,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Sensitive Data Scanning:</label>
+                                <label className="dc-form-label">Sensitive Data Scanning:</label>
                               </td>
                               <td>
                                 <select
@@ -3594,7 +3595,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Content-Based Classification:</label>
+                                <label className="dc-form-label">Content-Based Classification:</label>
                               </td>
                               <td>
                                 <select
@@ -3631,7 +3632,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Lineage Tracking:</label>
+                                <label className="dc-form-label">Data Lineage Tracking:</label>
                               </td>
                               <td>
                                 <select
@@ -3657,7 +3658,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Record Primacy Management:</label>
+                                <label className="dc-form-label">Record Primacy Management:</label>
                               </td>
                               <td>
                                 <select
@@ -3683,7 +3684,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Quality Controls:</label>
+                                <label className="dc-form-label">Data Quality Controls:</label>
                               </td>
                               <td>
                                 <select
@@ -3709,7 +3710,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Metadata Management:</label>
+                                <label className="dc-form-label">Metadata Management:</label>
                               </td>
                               <td>
                                 <select
@@ -3735,7 +3736,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Stewardship Program:</label>
+                                <label className="dc-form-label">Data Stewardship Program:</label>
                               </td>
                               <td>
                                 <select
@@ -3761,7 +3762,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Governance Framework:</label>
+                                <label className="dc-form-label">Data Governance Framework:</label>
                               </td>
                               <td>
                                 <select
@@ -3787,7 +3788,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Data Flow Documentation:</label>
+                                <label className="dc-form-label">Data Flow Documentation:</label>
                               </td>
                               <td>
                                 <select
@@ -3818,7 +3819,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Reporting & Analytics Governance:</label>
+                                <label className="dc-form-label">Reporting & Analytics Governance:</label>
                               </td>
                               <td>
                                 <select
@@ -3857,7 +3858,7 @@ const DCInputForm = ({
                           <tbody>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Additional Implementation Notes</label>
+                                <label className="dc-form-label">Additional Implementation Notes</label>
                               </td>
                               <td>
                                 <textarea
@@ -3873,7 +3874,7 @@ const DCInputForm = ({
                             </tr>
                             <tr>
                               <td className="dc-field-cell-label">
-                                <label>Business Justification</label>
+                                <label className="dc-form-label">Business Justification</label>
                               </td>
                               <td>
                                 <textarea
