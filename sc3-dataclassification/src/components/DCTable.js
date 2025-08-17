@@ -23,10 +23,16 @@ const DCTable = ({
     setHoveredRowIndex,
     handleRowClick
 }) => {
+    
+
+    if (entries.length === 0) {
+        return null;
+    }
+
     if (entries.length === 0) {
         return (
             <div className="dc-table-container">
-                <h3>📊 Data Classification Assessments</h3>
+                <h3>🗃️ Data Classification Assessments</h3>
                 <div className="dc-table-empty">
                     <p>No data classification entries yet.</p>
                     <p>Submit the form above to see your entries here.</p>
@@ -73,50 +79,50 @@ const DCTable = ({
             <div className="dc-table-inner">
 
                 <details open={dcOpen} className="dc-table-section">
-                <summary
-                    className="dc-table-summary"
-                    onClick={(e) => {
-                    e.preventDefault();
-                    setDCOpen(!dcOpen);
-                    }}
-                >
-                    📊 Data Classification Assessments
-                    <span className="dc-table-count">{entries.length} Data Classifications assessed</span>
-                </summary>
-                <div className="dc-table-content">
-                    {/* Data Classification Statistics */}
-                    {entries.length > 0 && (
-                        <div className="dc-table-statistics">
-                            <p>
-                                <strong>Total Entries:</strong> {entries.length} | 
-                                <strong> Public:</strong> {entries.filter(e => e.dataClassification?.toLowerCase().trim() === 'public').length} | 
-                                <strong> Internal:</strong> {entries.filter(e => e.dataClassification?.toLowerCase().trim() === 'internal').length} | 
-                                <strong> Confidential:</strong> {entries.filter(e => e.dataClassification?.toLowerCase().trim() === 'confidential').length} | 
-                                <strong> Restricted:</strong> {entries.filter(e => e.dataClassification?.toLowerCase().trim() === 'restricted').length}
-                            </p>
-                        </div>
-                    )}
+                    <summary
+                        className="dc-table-summary"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setDCOpen(!dcOpen);
+                        }}
+                    >
+                        🗃️ Data Classification Assessments
+                        <span className="dc-table-count">{entries.length} Data Classification{entries.length !== 1 ? 's' : ''} assessed</span>
+                    </summary>
+                    <div className="dc-table-content">
+                        {/* Data Classification Statistics */}
+                        {entries.length > 0 && (
+                            <div className="dc-table-statistics">
+                                <p>
+                                    <strong>Total Entries:</strong> {entries.length} | 
+                                    <strong> Public:</strong> {entries.filter(e => e.dataClassification?.toLowerCase().trim() === 'public').length} | 
+                                    <strong> Internal:</strong> {entries.filter(e => e.dataClassification?.toLowerCase().trim() === 'internal').length} | 
+                                    <strong> Confidential:</strong> {entries.filter(e => e.dataClassification?.toLowerCase().trim() === 'confidential').length} | 
+                                    <strong> Restricted:</strong> {entries.filter(e => e.dataClassification?.toLowerCase().trim() === 'restricted').length}
+                                </p>
+                            </div>
+                        )}
 
-                    {/* No Data Classifications Message */}
-                    {entries.length === 0 && (
-                    <div className="dc-table-empty">
-                        <h4>Current Data Classification - No Classifications Identified</h4>
-                        <p>
-                        No data classifications have been added to the current assessment yet. Use
-                        the "DC Fields" section above to:
-                        </p>
-                        <ul>
-                            <li>Fill in data classification details (asset name, asset type, data type, data classification, assessment conducted by who and when, etc.)</li>
-                            <li>Assess Data Classification</li>
-                            <li>Assess controls to secure data based on classification</li>
-                            <li>Click "Submit Data Classification Details" to add to this table</li>
-                        </ul>
-                        <button onClick={handleNewDataClassification} className="dc-btn primary">
-                        + Add First Data Classification Assessment
-                        </button>
+                        {/* No Data Classifications Message */}
+                        {entries.length === 0 && (
+                        <div className="dc-table-empty">
+                            <h4>Current Data Classification - No Classifications Identified</h4>
+                            <p>
+                            No data classifications have been added to the current assessment yet. Use
+                            the "DC Fields" section above to:
+                            </p>
+                            <ul>
+                                <li>Fill in data classification details (asset name, asset type, data type, data classification, assessment conducted by who and when, etc.)</li>
+                                <li>Assess Data Classification</li>
+                                <li>Assess controls to secure data based on classification</li>
+                                <li>Click "Submit Data Classification Details" to add to this table</li>
+                            </ul>
+                            <button onClick={handleNewDataClassification} className="dc-btn primary">
+                            + Add First Data Classification Assessment
+                            </button>
+                        </div>
+                        )}
                     </div>
-                    )}
-                </div>
                 </details>
 
                 {entries.length > 0 && (
@@ -502,30 +508,30 @@ const DCTable = ({
 
                 {/* Action Buttons */}
                 <div className='dc-table-button-container'>
-                <button
-                    type="button"
-                    onClick={dcFieldsOpen ? undefined : handleNewDataClassification}
-                    disabled={dcFieldsOpen}
-                    className={`dc-btn dc-btn-outline-secondary ${dcFieldsOpen ? 'disabled' : ''}`}
-                >
-                    + Add New Data Classification
-                </button>
-                
-                <button
-                    type="button"
-                    onClick={handleStartNew}
-                    className="dc-btn dc-btn-outline-primary"
-                >
-                    🗑️ Start New
-                </button>
+                    <button
+                        type="button"
+                        onClick={dcFieldsOpen ? undefined : handleNewDataClassification}
+                        disabled={dcFieldsOpen}
+                        className={`dc-btn dc-btn-outline-secondary ${dcFieldsOpen ? 'disabled' : ''}`}
+                    >
+                        + Add New Data Classification
+                    </button>
+                    
+                    <button
+                        type="button"
+                        onClick={handleStartNew}
+                        className="dc-btn dc-btn-outline-primary"
+                    >
+                        🗑️ Start New
+                    </button>
 
-                <button
-                    type="button"
-                    onClick={handleExport}
-                    className="dc-btn dc-btn-accent"
-                >
-                    📊 Export to Excel
-                </button>
+                    <button
+                        type="button"
+                        onClick={handleExport}
+                        className="dc-btn dc-btn-accent"
+                    >
+                        📊 Export to Excel
+                    </button>
                 </div>
             </div>
         </div>

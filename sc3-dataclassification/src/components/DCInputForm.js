@@ -11,7 +11,7 @@ const DCInputForm = ({
   setFieldsOpen
 }) => {
     const [validationWarnings, setValidationWarnings] = useState({});
-    const [extendedFieldsOpen, setExtendedFieldsOpen] = useState(false);
+    const [viewMode, setViewMode] = useState('basic'); // View mode state
 
     const assetTypes = [
         { value: 'printed-media', label: '📄 Printed Media', icon: '📄' },
@@ -681,7 +681,35 @@ const DCInputForm = ({
       <form onSubmit={handleSubmit}>
         {/* Basic Asset Information - Always Visible */}
         <details open={fieldsOpen} onToggle={e => setFieldsOpen(e.target.open)}>          
-          <summary className="dc-form-summary">🔍 Data Classification Assessment Form</summary>
+          <summary className="dc-form-summary">✏️ Data Classification Assessment Form</summary>
+          
+          {/* View Mode Selection */}
+          <div className="dc-view-mode-container">
+            <label>
+              View Mode:
+            </label>
+            <div className="dc-view-mode-options">
+              <label>
+                <input
+                  type="radio"
+                  value="basic"
+                  checked={viewMode === 'basic'}
+                  onChange={(e) => setViewMode(e.target.value)}
+                />
+                Basic (Essential fields only)
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="extended"
+                  checked={viewMode === 'extended'}
+                  onChange={(e) => setViewMode(e.target.value)}
+                />
+                Extended (All fields)
+              </label>
+            </div>
+          </div>
+          
             <fieldset className="dc-fieldset dc-fieldset-asset-info">
               <legend className="dc-legend dc-legend-asset-info">🎯 Asset Information</legend>
               <table className="dc-field-table">
@@ -772,136 +800,145 @@ const DCInputForm = ({
                       </select>
                     </td>
                   </tr>
-                  <tr>
-                    <td className="dc-field-cell-label">
-                      <label className="dc-form-label">Asset Description:</label>
-                    </td>
-                    <td>
-                      <textarea
-                        id="description"
-                        name="description"
-                        value={form.description}
-                        onChange={handleChange}
-                        placeholder="Describe the data asset, its purpose, and contents"
-                        rows="3"
-                        className="dc-textarea"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="dc-field-cell-label">
-                      <label className="dc-form-label">System & Process Dependencies:</label>
-                    </td>
-                    <td>
-                      <textarea
-                        id="dependencies"
-                        name="dependencies"
-                        value={form.dependencies}
-                        onChange={handleChange}
-                        placeholder="List systems, applications, processes, or workflows that depend on this data asset (e.g., CRM system, monthly reporting process, API integrations)"
-                        rows="3"
-                        className="dc-textarea"
-                      />
-                      <small className="dc-field-hint">
-                        Identify downstream systems, business processes, and workflows that would be impacted if this data asset becomes unavailable or compromised
-                      </small>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="dc-field-cell-label">
-                      <label className="dc-form-label">Data Owner:</label>
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        id="dataOwner"
-                        name="dataOwner"
-                        value={form.dataOwner}
-                        onChange={handleChange}
-                        placeholder="Business owner responsible for the data"
-                        className="dc-input"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="dc-field-cell-label">
-                      <label className="dc-form-label">Technical Owner:</label>
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        id="technicalOwner"
-                        name="technicalOwner"
-                        value={form.technicalOwner}
-                        onChange={handleChange}
-                        placeholder="Technical contact for implementation and support"
-                        className="dc-input"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="dc-field-cell-label">
-                      <label className="dc-form-label">Assessment Conducted By:<span className="dc-required">*</span></label>
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        id="assessorName"
-                        name="assessorName"
-                        value={form.assessorName}
-                        onChange={handleChange}
-                        placeholder="Name of person conducting this data classification assessment"
-                        required
-                        className="dc-input"
-                      />
-                      <small className="dc-field-hint">
-                        Enter the full name of the person responsible for this data classification assessment
-                      </small>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="dc-field-cell-label">
-                      <label className="dc-form-label">Assessment Date:<span className="dc-required">*</span></label>
-                    </td>
-                    <td>
-                      <input
-                        type="date"
-                        id="assessmentDate"
-                        name="assessmentDate"
-                        value={form.assessmentDate}
-                        onChange={handleChange}
-                        required
-                        className="dc-input-date"
-                      />
-                      <small className="dc-field-hint">
-                        Date when this data classification assessment was conducted
-                      </small>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="dc-field-cell-label">
-                      <label className="dc-form-label">Next Review Date:</label>
-                    </td>
-                    <td>
-                      <input
-                        type="date"
-                        id="reviewDate"
-                        name="reviewDate"
-                        value={form.reviewDate}
-                        onChange={handleChange}
-                        className="dc-input-date"
-                      />
-                    </td>
-                  </tr>
                 </tbody>
               </table>
             </fieldset>
 
-            {/* Extended Data Classification Assessment - Collapsible */}
-            <details open={extendedFieldsOpen} onToggle={e => { e.stopPropagation(); setExtendedFieldsOpen(e.target.open); }}>          
-              <summary className="dc-form-summary">🔍 Extended Data Classification Assessment (Optional)</summary>
-              <table className="dc-form-table">
-                <tbody>
+            {/* Extended Fields - Only show when viewMode is 'extended' */}
+            {viewMode === 'extended' && (
+                <table className="dc-form-table">
+                  <tbody>
+                    {/* Additional Asset Information Fields - Moved from Basic */}
+                    <tr>
+                      <td colSpan="2">
+                        <fieldset className="dc-fieldset dc-fieldset-asset-info-extended">
+                          <legend className="dc-legend dc-legend-asset-info">📝 Additional Asset Information</legend>
+                          <table className="dc-field-table">
+                            <tbody>
+                              <tr>
+                                <td className="dc-field-cell-label">
+                                  <label className="dc-form-label">Asset Description:</label>
+                                </td>
+                                <td>
+                                  <textarea
+                                    id="description"
+                                    name="description"
+                                    value={form.description}
+                                    onChange={handleChange}
+                                    placeholder="Describe the data asset, its purpose, and contents"
+                                    rows="3"
+                                    className="dc-textarea"
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="dc-field-cell-label">
+                                  <label className="dc-form-label">System & Process Dependencies:</label>
+                                </td>
+                                <td>
+                                  <textarea
+                                    id="dependencies"
+                                    name="dependencies"
+                                    value={form.dependencies}
+                                    onChange={handleChange}
+                                    placeholder="List systems, applications, processes, or workflows that depend on this data asset (e.g., CRM system, monthly reporting process, API integrations)"
+                                    rows="3"
+                                    className="dc-textarea"
+                                  />
+                                  <small className="dc-field-hint">
+                                    Identify downstream systems, business processes, and workflows that would be impacted if this data asset becomes unavailable or compromised
+                                  </small>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="dc-field-cell-label">
+                                  <label className="dc-form-label">Data Owner:</label>
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    id="dataOwner"
+                                    name="dataOwner"
+                                    value={form.dataOwner}
+                                    onChange={handleChange}
+                                    placeholder="Business owner responsible for the data"
+                                    className="dc-input"
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="dc-field-cell-label">
+                                  <label className="dc-form-label">Technical Owner:</label>
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    id="technicalOwner"
+                                    name="technicalOwner"
+                                    value={form.technicalOwner}
+                                    onChange={handleChange}
+                                    placeholder="Technical contact for implementation and support"
+                                    className="dc-input"
+                                  />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="dc-field-cell-label">
+                                  <label className="dc-form-label">Assessment Conducted By:</label>
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    id="assessorName"
+                                    name="assessorName"
+                                    value={form.assessorName}
+                                    onChange={handleChange}
+                                    placeholder="Name of person conducting this data classification assessment"
+                                    className="dc-input"
+                                  />
+                                  <small className="dc-field-hint">
+                                    Enter the full name of the person responsible for this data classification assessment
+                                  </small>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="dc-field-cell-label">
+                                  <label className="dc-form-label">Assessment Date:</label>
+                                </td>
+                                <td>
+                                  <input
+                                    type="date"
+                                    id="assessmentDate"
+                                    name="assessmentDate"
+                                    value={form.assessmentDate}
+                                    onChange={handleChange}
+                                    className="dc-input-date"
+                                  />
+                                  <small className="dc-field-hint">
+                                    Date when this data classification assessment was conducted
+                                  </small>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="dc-field-cell-label">
+                                  <label className="dc-form-label">Next Review Date:</label>
+                                </td>
+                                <td>
+                                  <input
+                                    type="date"
+                                    id="reviewDate"
+                                    name="reviewDate"
+                                    value={form.reviewDate}
+                                    onChange={handleChange}
+                                    className="dc-input-date"
+                                  />
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </fieldset>
+                      </td>
+                    </tr>
                   {/* Security Controls Fields */}
                   <tr>
                     <td colSpan="2">
@@ -3895,9 +3932,8 @@ const DCInputForm = ({
                   </tr>
                 </tbody>
               </table>
-            </details>            
+            )}
 
-            {/* Recommended Controls Display */}
             {recommendedControls && (
                 <div className="dc-recommendations">
                     <h4>💡 Recommended Controls</h4>
@@ -3911,23 +3947,24 @@ const DCInputForm = ({
                 </div>
             )}
 
-            {/* Form Actions */}
             <p></p>
-            <div className="dc-flex-gap">
-            <button
-              type="submit"
-              className="dc-btn dc-btn-secondary"
-            >
-              {editIndex !== null ? "Update Entry" : "Submit Data Classification Details"}
-            </button>
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="dc-btn dc-btn-cancel"
-            >
-              Cancel
-            </button>
-          </div>
+            <div className="dc-button-container">
+              <div className="dc-button-group">
+                <button
+                  type="submit"
+                  className="dc-btn dc-btn-secondary"
+                >
+                  {editIndex !== null ? "Update Entry" : "Submit Data Classification Details"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="dc-btn dc-btn-outline"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
         </details>
       </form>
     );

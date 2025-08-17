@@ -5,7 +5,7 @@ const DCIntro = () => {
     return (
         <details className="dc-intro-details">
             <summary className="dc-intro-summary">
-                Data Classification Guidance and Preparation
+                📚 Data Classification Guidance and Preparation
             </summary>
             <p>
             <i>Data Classification</i> helps identify and evaluate the sensitivity, value, and importance of data within an organization and the risk associated with the data. 
@@ -222,6 +222,16 @@ const DCIntro = () => {
                     </div>
                 </div>
                 
+                <div className="dc-back-to-top">
+                    <button 
+                        onClick={() => document.querySelector('.dc-intro-summary').scrollIntoView({ behavior: 'smooth' })}
+                        className="dc-back-to-top-btn"
+                        title="Back to Top"
+                    >
+                        ↑ Back to Top
+                    </button>
+                </div>
+                
                 <h4>🛡️ Asset-Specific Security Controls Matrix</h4>
                 <p>The following table provides guidance on typical security controls applicable for each asset type based on their data classification and corresponding risk level:</p>
                 
@@ -332,50 +342,76 @@ const DCIntro = () => {
                     </div>
                 </div>
                 
+                <div className="dc-back-to-top">
+                    <button 
+                        onClick={() => document.querySelector('.dc-intro-summary').scrollIntoView({ behavior: 'smooth' })}
+                        className="dc-back-to-top-btn"
+                        title="Back to Top"
+                    >
+                        ↑ Back to Top
+                    </button>
+                </div>
+                
                 <h4>🎯 Risk Classification Framework</h4>
                 <p>The risk impact levels in the matrix above aligns with standard organizational risk classifications:</p>
                 
-                <table className="dc-risk-framework">
-                    <thead>
-                        <tr>
-                            <th>Risk Level</th>
-                            <th>Impact Description</th>
-                            <th>Response Time</th>
-                            <th>Management Escalation</th>
-                            <th>Typical Controls</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong><span className="dc-risk-low">Low Risk</span></strong></td>
-                            <td>Minimal or no impact on operations, reputation, or compliance</td>
-                            <td>Standard response (days/weeks)</td>
-                            <td>Operational level</td>
-                            <td>Basic access controls, standard backups</td>
-                        </tr>
-                        <tr>
-                            <td><strong><span className="dc-risk-medium">Medium Risk</span></strong></td>
-                            <td>Minor operational disruption, limited financial impact</td>
-                            <td>Priority response (hours/days)</td>
-                            <td>Middle management</td>
-                            <td>Enhanced monitoring, regular access reviews</td>
-                        </tr>
-                        <tr>
-                            <td><strong><span className="dc-risk-high">High Risk</span></strong></td>
-                            <td>Significant business impact, regulatory issues, competitive disadvantage</td>
-                            <td>Urgent response (minutes/hours)</td>
-                            <td>Senior management</td>
-                            <td>Encryption, MFA, detailed logging, DLP</td>
-                        </tr>
-                        <tr>
-                            <td><strong><span className="dc-risk-critical">Critical Risk</span></strong></td>
-                            <td>Severe business disruption, legal liability, potential business failure</td>
-                            <td>Immediate response (minutes)</td>
-                            <td>Executive/Board level</td>
-                            <td>Air-gapped systems, HSMs, continuous monitoring</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div className="dc-classification-table-wrapper">
+                    {/* Outer wrapper for horizontal scroll so that scroll bar does not hide the last row - works for Chrome and Edge, not for Firefox */}
+                    <div className="dc-classification-table-scroll">
+                        <table className="dc-risk-framework">
+                            <thead>
+                                <tr>
+                                    <th>Risk Level</th>
+                                    <th>Impact Description</th>
+                                    <th>Response Time</th>
+                                    <th>Management Escalation</th>
+                                    <th>Typical Controls</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong><span className="dc-risk-low">Low Risk</span></strong></td>
+                                    <td>Minimal or no impact on operations, reputation, or compliance</td>
+                                    <td>Standard response (days/weeks)</td>
+                                    <td>Operational level</td>
+                                    <td>Basic access controls, standard backups</td>
+                                </tr>
+                                <tr>
+                                    <td><strong><span className="dc-risk-medium">Medium Risk</span></strong></td>
+                                    <td>Minor operational disruption, limited financial impact</td>
+                                    <td>Priority response (hours/days)</td>
+                                    <td>Middle management</td>
+                                    <td>Enhanced monitoring, regular access reviews</td>
+                                </tr>
+                                <tr>
+                                    <td><strong><span className="dc-risk-high">High Risk</span></strong></td>
+                                    <td>Significant business impact, regulatory issues, competitive disadvantage</td>
+                                    <td>Urgent response (minutes/hours)</td>
+                                    <td>Senior management</td>
+                                    <td>Encryption, MFA, detailed logging, DLP</td>
+                                </tr>
+                                <tr>
+                                    <td><strong><span className="dc-risk-critical">Critical Risk</span></strong></td>
+                                    <td>Severe business disruption, legal liability, potential business failure</td>
+                                    <td>Immediate response (minutes)</td>
+                                    <td>Executive/Board level</td>
+                                    <td>Air-gapped systems, HSMs, continuous monitoring</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p></p>
+                    </div>
+                </div>
+                
+                <div className="dc-back-to-top">
+                    <button 
+                        onClick={() => document.querySelector('.dc-intro-summary').scrollIntoView({ behavior: 'smooth' })}
+                        className="dc-back-to-top-btn"
+                        title="Back to Top"
+                    >
+                        ↑ Back to Top
+                    </button>
+                </div>
                 
                 <p><strong>Classification Criteria:</strong></p>
                 <ul>
@@ -387,6 +423,16 @@ const DCIntro = () => {
                 
                 <div>
                 </div>
+                
+                <div className="dc-back-to-top">
+                    <button 
+                        onClick={() => document.querySelector('.dc-intro-summary').scrollIntoView({ behavior: 'smooth' })}
+                        className="dc-back-to-top-btn"
+                        title="Back to Top"
+                    >
+                        ↑ Back to Top
+                    </button>
+                </div>
             </div>
             <p><b>Disclaimer:</b> The information provided here is for general informational purposes only and will require adaptation for specific businesses and business size and maturity capabilities and is not intended as legal advice. 
           Please consult with a qualified legal professional for specific legal advice tailored to your situation.</p>
@@ -394,6 +440,7 @@ const DCIntro = () => {
             It is aimed at providing guidance on related controls to consider and needs to be customised to fit your organization's unique needs, technology landscape, and requirements. 
             In some cases being able to select multiple controls for a particular technology focus area may map closer to real world implementations but this form only allows the selection of a single control. 
             Consider what a Data Classification assessment tool should cover in terms of depth and breadth and time undertaken to perform the assessment vs what should be covered by a design.</p>
+            <hr />
         </details>
   );
 };

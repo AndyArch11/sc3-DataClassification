@@ -26,7 +26,11 @@ const DCReport = ({ entries = [] }) => {
                 y: event.clientY - 10
             }));
         }
-    };
+    };    
+
+    if (entries.length === 0) {
+        return null;
+    }
 
     if (entries.length === 0) {
         return (
@@ -101,204 +105,211 @@ const DCReport = ({ entries = [] }) => {
 
     return (
         <div className="dc-report-container">
-            <h3>📊 Data Classification Summary</h3>
+            <details className="dc-report-details">
+                <summary className="dc-report-summary">
+                📊 Data Classification Summary
+                </summary>
+                <div>
+                    <h3 className="dc-report-title">Data Classification Summary</h3>
 
-            <div className="dc-classification-breakdown">
-                <h4>📋 Classification Breakdown</h4>
-                <div className="dc-donut-container">
-                    <div className="dc-donut-chart">
-                        <svg width="200" height="200" viewBox="0 0 200 200">
-                            <circle
-                                cx="100"
-                                cy="100"
-                                r="80"
-                                fill="none"
-                                stroke="#f0f0f0"
-                                strokeWidth="40"
-                            />
-                            {classificationPercentages.length === 1 ? (
-                                // Single classification - show full circle
-                                <circle
-                                    cx="100"
-                                    cy="100"
-                                    r="80"
-                                    fill="none"
-                                    stroke={donutSegments[0].color}
-                                    strokeWidth="40"
-                                    style={{ cursor: 'pointer' }}
-                                    onMouseEnter={(e) => handleMouseEnter(e, `${donutSegments[0].classification}: ${donutSegments[0].count} asset${donutSegments[0].count !== 1 ? 's' : ''} (100%)`)}
-                                    onMouseLeave={handleMouseLeave}
-                                    onMouseMove={handleMouseMove}
-                                />
-                            ) : (
-                                // Multiple classifications - show arcs
-                                donutSegments.map(({ classification, percentage, color, count }, index) => {
-                                    const radius = 80;
-                                    const circumference = 2 * Math.PI * radius;
-                                    const strokeDasharray = `${(percentage / 100) * circumference} ${circumference}`;
-                                    const strokeDashoffset = -((donutSegments.slice(0, index).reduce((sum, seg) => sum + seg.percentage, 0) / 100) * circumference);
-                                    
-                                    return (
+                    <div className="dc-classification-breakdown">
+                        <h4>📋 Classification Breakdown</h4>
+                        <div className="dc-donut-container">
+                            <div className="dc-donut-chart">
+                                <svg width="100%" height="100%" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
+                                    <circle
+                                        cx="100"
+                                        cy="100"
+                                        r="80"
+                                        fill="none"
+                                        stroke="#f0f0f0"
+                                        strokeWidth="40"
+                                    />
+                                    {classificationPercentages.length === 1 ? (
+                                        // Single classification - show full circle
                                         <circle
-                                            key={classification}
                                             cx="100"
                                             cy="100"
-                                            r={radius}
+                                            r="80"
                                             fill="none"
-                                            stroke={color}
+                                            stroke={donutSegments[0].color}
                                             strokeWidth="40"
-                                            strokeDasharray={strokeDasharray}
-                                            strokeDashoffset={strokeDashoffset}
-                                            transform="rotate(-90 100 100)"
                                             style={{ cursor: 'pointer' }}
-                                            onMouseEnter={(e) => handleMouseEnter(e, `${classification}: ${count} asset${count !== 1 ? 's' : ''} (${Math.round(percentage)}%)`)}
+                                            onMouseEnter={(e) => handleMouseEnter(e, `${donutSegments[0].classification}: ${donutSegments[0].count} asset${donutSegments[0].count !== 1 ? 's' : ''} (100%)`)}
                                             onMouseLeave={handleMouseLeave}
                                             onMouseMove={handleMouseMove}
                                         />
-                                    );
-                                })
-                            )}
-                        </svg>
-                        <div className="dc-donut-center">
-                            <div className="dc-donut-total">{entries.length}</div>
-                            <div className="dc-donut-label">Assets</div>
-                        </div>
-                    </div>
-                    <div className="dc-donut-legend">
-                        {classificationPercentages.map(({ classification, count, percentage }) => (
-                            <div key={classification} className="dc-legend-item">
-                                <span className={`dc-legend-color dc-${classification.toLowerCase()}`}></span>
-                                <span className="dc-legend-text">
-                                    {classification === 'Public' && '🌐'}
-                                    {classification === 'Internal' && '🏢'}
-                                    {classification === 'Confidential' && '🔒'}
-                                    {classification === 'Restricted' && '🚫'}
-                                    {' '}{classification}: {count} ({Math.round(percentage)}%)
-                                </span>
+                                    ) : (
+                                        // Multiple classifications - show arcs
+                                        donutSegments.map(({ classification, percentage, color, count }, index) => {
+                                            const radius = 80;
+                                            const circumference = 2 * Math.PI * radius;
+                                            const strokeDasharray = `${(percentage / 100) * circumference} ${circumference}`;
+                                            const strokeDashoffset = -((donutSegments.slice(0, index).reduce((sum, seg) => sum + seg.percentage, 0) / 100) * circumference);
+                                            
+                                            return (
+                                                <circle
+                                                    key={classification}
+                                                    cx="100"
+                                                    cy="100"
+                                                    r={radius}
+                                                    fill="none"
+                                                    stroke={color}
+                                                    strokeWidth="40"
+                                                    strokeDasharray={strokeDasharray}
+                                                    strokeDashoffset={strokeDashoffset}
+                                                    transform="rotate(-90 100 100)"
+                                                    style={{ cursor: 'pointer' }}
+                                                    onMouseEnter={(e) => handleMouseEnter(e, `${classification}: ${count} asset${count !== 1 ? 's' : ''} (${Math.round(percentage)}%)`)}
+                                                    onMouseLeave={handleMouseLeave}
+                                                    onMouseMove={handleMouseMove}
+                                                />
+                                            );
+                                        })
+                                    )}
+                                </svg>
+                                <div className="dc-donut-center">
+                                    <div className="dc-donut-total">{entries.length}</div>
+                                    <div className="dc-donut-label">Assets</div>
+                                </div>
                             </div>
-                        ))}
+                            <div className="dc-donut-legend">
+                                {classificationPercentages.map(({ classification, count, percentage }) => (
+                                    <div key={classification} className="dc-legend-item">
+                                        <span className={`dc-legend-color dc-${classification.toLowerCase()}`}></span>
+                                        <span className="dc-legend-text">
+                                            {classification === 'Public' && '🌐'}
+                                            {classification === 'Internal' && '🏢'}
+                                            {classification === 'Confidential' && '🔒'}
+                                            {classification === 'Restricted' && '🚫'}
+                                            {' '}{classification}: {count} ({Math.round(percentage)}%)
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            
-            <div className="dc-report-stats">
-                <div className="dc-stat-card">
-                    <h4>📈 Total Assets</h4>
-                    <div className="dc-stat-number">{entries.length}</div>
-                </div>
-                
-                <div className="dc-stat-card">
-                    <h4>🏗️ Asset Types</h4>
-                    <div className="dc-stat-number">{uniqueAssetTypes}</div>
-                </div>
-                
-                <div className="dc-stat-card">
-                    <h4>📊 Data Types</h4>
-                    <div className="dc-stat-number">{uniqueDataTypes}</div>
-                </div>
-            </div>
-
-            <div className="dc-asset-type-breakdown">
-                <h4>🏗️ Asset Type Breakdown</h4>
-                <div className="dc-asset-type-list">
-                    {assetTypeBreakdown.map(({ assetType, count, percentage }) => (
-                        <div key={assetType} className="dc-asset-type-item">
-                            <span className="dc-asset-type-icon">
-                                {assetType === 'printed-media' && '📄'}
-                                {assetType === 'digital-files' && '💾'}
-                                {assetType === 'database-data' && '🗄️'}
-                                {assetType === 'systems-applications' && '🖥️'}
-                                {assetType === 'emails' && '📧'}
-                                {assetType === 'cloud-storage' && '☁️'}
-                                {assetType === 'mobile-devices' && '📱'}
-                                {!['printed-media', 'digital-files', 'database-data', 'systems-applications', 'emails', 'cloud-storage', 'mobile-devices'].includes(assetType) && '📦'}
-                            </span>
-                            <span className="dc-asset-type-label">
-                                {assetType === 'printed-media' ? 'Printed Media' :
-                                 assetType === 'digital-files' ? 'Digital Files' :
-                                 assetType === 'database-data' ? 'Database Data' :
-                                 assetType === 'systems-applications' ? 'Systems/Applications' :
-                                 assetType === 'emails' ? 'Emails' :
-                                 assetType === 'cloud-storage' ? 'Cloud Storage' :
-                                 assetType === 'mobile-devices' ? 'Mobile Devices' :
-                                 assetType.charAt(0).toUpperCase() + assetType.slice(1).replace(/-/g, ' ')}
-                            </span>
-                            <span className="dc-asset-type-count">{count}</span>
-                            <span className="dc-asset-type-percentage">
-                                ({Math.round(percentage)}%)
-                            </span>
+                    
+                    <div className="dc-report-stats">
+                        <div className="dc-stat-card">
+                            <h4>📈 Total Assets</h4>
+                            <div className="dc-stat-number">{entries.length}</div>
                         </div>
-                    ))}
-                </div>
-            </div>
-
-            <div className="dc-data-type-breakdown">
-                <h4>📊 Data Type Breakdown</h4>
-                <div className="dc-data-type-list">
-                    {dataTypeBreakdown.map(({ dataType, count, percentage }) => (
-                        <div key={dataType} className="dc-data-type-item">
-                            <span className="dc-data-type-icon">
-                                {dataType === 'pii' && '👤'}
-                                {dataType === 'financial' && '💰'}
-                                {dataType === 'ip' && '🧠'}
-                                {dataType === 'healthcare' && '🏥'}
-                                {dataType === 'customer' && '👥'}
-                                {dataType === 'employee' && '👷'}
-                                {dataType === 'operational' && '⚙️'}
-                                {dataType === 'technical' && '🔧'}
-                                {dataType === 'strategic' && '📈'}
-                                {dataType === 'regulatory' && '⚖️'}
-                                {dataType === 'research' && '🔬'}
-                                {dataType === 'legal' && '📜'}
-                                {dataType === 'marketing' && '📢'}
-                                {dataType === 'public-info' && '📰'}
-                                {dataType === 'mixed' && '🔄'}
-                                {dataType === 'other' && '📋'}
-                                {!['pii', 'financial', 'ip', 'healthcare', 'customer', 'employee', 'operational', 'technical', 'strategic', 'regulatory', 'research', 'legal', 'marketing', 'public-info', 'mixed', 'other'].includes(dataType) && '📄'}
-                            </span>
-                            <span className="dc-data-type-label">
-                                {dataType === 'pii' ? 'Personal Identifiable Information (PII)' :
-                                 dataType === 'financial' ? 'Financial Data' :
-                                 dataType === 'ip' ? 'Intellectual Property (IP)' :
-                                 dataType === 'healthcare' ? 'Healthcare/Medical Data' :
-                                 dataType === 'customer' ? 'Customer Data' :
-                                 dataType === 'employee' ? 'Employee Data' :
-                                 dataType === 'operational' ? 'Operational Data' :
-                                 dataType === 'technical' ? 'Technical Data' :
-                                 dataType === 'strategic' ? 'Strategic/Business Data' :
-                                 dataType === 'regulatory' ? 'Regulatory/Compliance Data' :
-                                 dataType === 'research' ? 'Research & Development' :
-                                 dataType === 'legal' ? 'Legal Documents' :
-                                 dataType === 'marketing' ? 'Marketing Data' :
-                                 dataType === 'public-info' ? 'Public Information' :
-                                 dataType === 'mixed' ? 'Mixed Data Types' :
-                                 dataType === 'other' ? 'Other' :
-                                 dataType.charAt(0).toUpperCase() + dataType.slice(1).replace(/-/g, ' ')}
-                            </span>
-                            <span className="dc-data-type-count">{count}</span>
-                            <span className="dc-data-type-percentage">
-                                ({Math.round(percentage)}%)
-                            </span>
+                        
+                        <div className="dc-stat-card">
+                            <h4>🏗️ Asset Types</h4>
+                            <div className="dc-stat-number">{uniqueAssetTypes}</div>
                         </div>
-                    ))}
+                        
+                        <div className="dc-stat-card">
+                            <h4>📊 Data Types</h4>
+                            <div className="dc-stat-number">{uniqueDataTypes}</div>
+                        </div>
+                    </div>
+
+                    <div className="dc-asset-type-breakdown">
+                        <h4>🏗️ Asset Type Breakdown</h4>
+                        <div className="dc-asset-type-list">
+                            {assetTypeBreakdown.map(({ assetType, count, percentage }) => (
+                                <div key={assetType} className="dc-asset-type-item">
+                                    <span className="dc-asset-type-icon">
+                                        {assetType === 'printed-media' && '📄'}
+                                        {assetType === 'digital-files' && '💾'}
+                                        {assetType === 'database-data' && '🗄️'}
+                                        {assetType === 'systems-applications' && '🖥️'}
+                                        {assetType === 'emails' && '📧'}
+                                        {assetType === 'cloud-storage' && '☁️'}
+                                        {assetType === 'mobile-devices' && '📱'}
+                                        {!['printed-media', 'digital-files', 'database-data', 'systems-applications', 'emails', 'cloud-storage', 'mobile-devices'].includes(assetType) && '📦'}
+                                    </span>
+                                    <span className="dc-asset-type-label">
+                                        {assetType === 'printed-media' ? 'Printed Media' :
+                                        assetType === 'digital-files' ? 'Digital Files' :
+                                        assetType === 'database-data' ? 'Database Data' :
+                                        assetType === 'systems-applications' ? 'Systems/Applications' :
+                                        assetType === 'emails' ? 'Emails' :
+                                        assetType === 'cloud-storage' ? 'Cloud Storage' :
+                                        assetType === 'mobile-devices' ? 'Mobile Devices' :
+                                        assetType.charAt(0).toUpperCase() + assetType.slice(1).replace(/-/g, ' ')}
+                                    </span>
+                                    <span className="dc-asset-type-count">{count}</span>
+                                    <span className="dc-asset-type-percentage">
+                                        ({Math.round(percentage)}%)
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="dc-data-type-breakdown">
+                        <h4>📊 Data Type Breakdown</h4>
+                        <div className="dc-data-type-list">
+                            {dataTypeBreakdown.map(({ dataType, count, percentage }) => (
+                                <div key={dataType} className="dc-data-type-item">
+                                    <span className="dc-data-type-icon">
+                                        {dataType === 'pii' && '👤'}
+                                        {dataType === 'financial' && '💰'}
+                                        {dataType === 'ip' && '🧠'}
+                                        {dataType === 'healthcare' && '🏥'}
+                                        {dataType === 'customer' && '👥'}
+                                        {dataType === 'employee' && '👷'}
+                                        {dataType === 'operational' && '⚙️'}
+                                        {dataType === 'technical' && '🔧'}
+                                        {dataType === 'strategic' && '📈'}
+                                        {dataType === 'regulatory' && '⚖️'}
+                                        {dataType === 'research' && '🔬'}
+                                        {dataType === 'legal' && '📜'}
+                                        {dataType === 'marketing' && '📢'}
+                                        {dataType === 'public-info' && '📰'}
+                                        {dataType === 'mixed' && '🔄'}
+                                        {dataType === 'other' && '📋'}
+                                        {!['pii', 'financial', 'ip', 'healthcare', 'customer', 'employee', 'operational', 'technical', 'strategic', 'regulatory', 'research', 'legal', 'marketing', 'public-info', 'mixed', 'other'].includes(dataType) && '📄'}
+                                    </span>
+                                    <span className="dc-data-type-label">
+                                        {dataType === 'pii' ? 'Personal Identifiable Information (PII)' :
+                                        dataType === 'financial' ? 'Financial Data' :
+                                        dataType === 'ip' ? 'Intellectual Property (IP)' :
+                                        dataType === 'healthcare' ? 'Healthcare/Medical Data' :
+                                        dataType === 'customer' ? 'Customer Data' :
+                                        dataType === 'employee' ? 'Employee Data' :
+                                        dataType === 'operational' ? 'Operational Data' :
+                                        dataType === 'technical' ? 'Technical Data' :
+                                        dataType === 'strategic' ? 'Strategic/Business Data' :
+                                        dataType === 'regulatory' ? 'Regulatory/Compliance Data' :
+                                        dataType === 'research' ? 'Research & Development' :
+                                        dataType === 'legal' ? 'Legal Documents' :
+                                        dataType === 'marketing' ? 'Marketing Data' :
+                                        dataType === 'public-info' ? 'Public Information' :
+                                        dataType === 'mixed' ? 'Mixed Data Types' :
+                                        dataType === 'other' ? 'Other' :
+                                        dataType.charAt(0).toUpperCase() + dataType.slice(1).replace(/-/g, ' ')}
+                                    </span>
+                                    <span className="dc-data-type-count">{count}</span>
+                                    <span className="dc-data-type-percentage">
+                                        ({Math.round(percentage)}%)
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    
+                    {/* Custom Tooltip */}
+                    {tooltip.visible && (
+                        <div 
+                            className="dc-tooltip"
+                            style={{
+                                position: 'fixed',
+                                left: tooltip.x + 10,
+                                top: tooltip.y,
+                                zIndex: 1000,
+                                pointerEvents: 'none'
+                            }}
+                        >
+                            {tooltip.content}
+                        </div>
+                    )}
                 </div>
-            </div>
-            
-            {/* Custom Tooltip */}
-            {tooltip.visible && (
-                <div 
-                    className="dc-tooltip"
-                    style={{
-                        position: 'fixed',
-                        left: tooltip.x + 10,
-                        top: tooltip.y,
-                        zIndex: 1000,
-                        pointerEvents: 'none'
-                    }}
-                >
-                    {tooltip.content}
-                </div>
-            )}
+            </details>
         </div>
     );
 };
