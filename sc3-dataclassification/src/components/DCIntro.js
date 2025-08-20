@@ -1,14 +1,36 @@
 import React from 'react';
 import "./DC.css";
 
-const DCIntro = () => {
+const DCIntro = () => {     
+
+    // Function to scroll to top
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    // Back to top button component
+    const BackToTopButton = ({ className = "" }) => (
+        <div className={`dc-back-to-top-container ${className}`}>
+            <button 
+                onClick={scrollToTop}
+                className="dc-back-to-top-btn"
+                title="Back to top of page"
+            >
+                ↑ Back to Top
+            </button>
+        </div>
+    );
+
     return (
         <details className="dc-intro-details">
             <summary className="dc-intro-summary">
                 📚 Data Classification Guidance and Preparation
             </summary>
             <p>
-            <i>Data Classification</i> helps identify and evaluate the sensitivity, value, and importance of data within an organization and the risk associated with the data. 
+            <i>Data Classification</i> helps identify and evaluate the sensitivity, value, and importance of data within an organisation and the risk associated with the data. 
             This process is crucial for ensuring that data is handled appropriately, protecting sensitive information, and complying with legal and regulatory obligations. Data classification processes help safeguard the <b>Confidentiality</b>, <b>Integrity</b>, and <b>Availability</b> of data.
             </p>
             <div>
@@ -28,7 +50,7 @@ const DCIntro = () => {
                     <li><em><a href="https://www.oaic.gov.au/privacy/australian-privacy-principles">Australian Privacy Principles</a></em> - Guidelines for the Collection, Use, and Disclosure of Personal Information</li>
                     <li><em><a href="https://gdpr-info.eu/">GDPR</a></em> - EU General Data Protection Regulation</li>
                     <li><em><a href="https://www.hhs.gov/hipaa/index.html">HIPAA</a></em> - US Health Insurance Portability and Accountability Act</li>
-                    <li><em><a href="https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final">NIST SP 800-53</a></em> - Security and Privacy Controls for Information Systems and Organizations</li>
+                    <li><em><a href="https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final">NIST SP 800-53</a></em> - Security and Privacy Controls for Information Systems and Organisations</li>
                     <li><em><a href="https://www.pcisecuritystandards.org/">PCI DSS</a></em> - Payment Card Industry Data Security Standard</li>
                 </ul>
                 <p>Addressing data security can be a daunting task. ISO 27001 Annex A alone has 93 security control measures specified for securing information assets. 
@@ -51,18 +73,18 @@ const DCIntro = () => {
                         <li>Common categories include <b>public</b>, <b>internal</b>, <b>confidential</b>, and <b>restricted</b>, but more complex organisations may require more granular classifications.</li>
                         <li>Each category should have clear definitions and criteria for classification.</li>
                         <li>Consider using a tiered approach to classification, where data is assigned a level of sensitivity based on its potential impact if compromised.</li>
-                        <li>The classifications should be aligned with the organization's overall risk management framework.</li>
+                        <li>The classifications should be aligned with the organisation's overall risk management framework.</li>
                         <li>Implement a process for reviewing and updating classifications as needed.</li>
                     </ul>
-                    <li><strong>🏷️ Labeling:</strong> Label data according to its data classification.</li>
+                    <li><strong>🏷️ Labelling:</strong> Label data according to its data classification.</li>
                     <ul>
-                        <li>The asset owner is responsible for labeling the data according to its classification.</li>
+                        <li>The asset owner is responsible for labelling the data according to its classification.</li>
                         <li>Use labels aligned with the classification scheme to indicate the sensitivity level of the data.</li>
                         <li>Labels can be physical (e.g., on paper documents) or digital (e.g., metadata, file names).</li>
                         <li>Ensure that labels are visible, easily understood, and consistently applied by all users who handle the data.</li>
-                        <li>Provide training and guidance to employees on the importance of data classification and proper labeling practices.</li>
-                        <li>Establish a process for reporting and addressing labeling issues or inconsistencies.</li>
-                        <li>Consider using automated tools to assist with labeling, especially for large volumes of data.</li>
+                        <li>Provide training and guidance to employees on the importance of data classification and proper labelling practices.</li>
+                        <li>Establish a process for reporting and addressing labelling issues or inconsistencies.</li>
+                        <li>Consider using automated tools to assist with labelling, especially for large volumes of data.</li>
                         <li>Ensure that labels are updated when data is moved, copied, or modified.</li>
                             <ul>
                                 <li>Implement version control for labels to track changes over time.</li>
@@ -87,7 +109,7 @@ const DCIntro = () => {
                               <li>Use role-based access controls (RBAC) to enforce data access policies.</li>
                               <li>Regularly review and update access permissions to ensure they align with current classification levels.</li>
                               <li>Implement multi-factor authentication (MFA) for accessing sensitive data.</li>
-                              <li>Monitor access to sensitive data and log any unauthorized access attempts.</li>
+                              <li>Monitor access to sensitive data and log any unauthorised access attempts.</li>
                               <li>Establish a process for reviewing and revoking access to sensitive data when no longer needed.</li>
                               <li>Implement a process for reporting and addressing security incidents related to sensitive data.</li>
                               <li>Ensure that staff have sufficient access to the data required to perform their job functions based on their roles and responsibilities.</li>
@@ -113,7 +135,7 @@ const DCIntro = () => {
                 
                 <h4>📋 Data Classification Matrix</h4>
                 <p>The following table provides guidance on classifying different types of assets based on their sensitivity and potential impact if compromised. 
-                The risk impact levels correspond to organizational risk classifications: <span className="dc-risk-low">Low</span>, <span className="dc-risk-medium">Medium</span>, <span className="dc-risk-high">High</span>, and <span className="dc-risk-critical">Critical</span>.</p>
+                The risk impact levels correspond to organisational risk classifications: <span className="dc-risk-low">Low</span>, <span className="dc-risk-medium">Medium</span>, <span className="dc-risk-high">High</span>, and <span className="dc-risk-critical">Critical</span>.</p>
                 
                 <div className="dc-classification-table-wrapper">
                     {/* Outer wrapper for horizontal scroll so that scroll bar does not hide the last row - works for Chrome and Edge, not for Firefox */}
@@ -143,7 +165,7 @@ const DCIntro = () => {
                                     <td><strong>📄 Printed Media</strong></td>
                                     <td>Marketing materials, public reports, job postings</td>
                                     <td><span className="dc-risk-low">Low</span><br/>No business impact</td>
-                                    <td>Internal memos, meeting minutes, organizational charts</td>
+                                    <td>Internal memos, meeting minutes, organisational charts</td>
                                     <td><span className="dc-risk-medium">Medium</span><br/>Minor operational disruption</td>
                                     <td>Contract drafts, financial reports, HR policies</td>
                                     <td><span className="dc-risk-high">High</span><br/>Competitive disadvantage, legal issues</td>
@@ -163,7 +185,7 @@ const DCIntro = () => {
                                 </tr>
                                 <tr>
                                     <td><strong>🗄️ Database Data</strong></td>
-                                    <td>Product catalogs, public reference data</td>
+                                    <td>Product catalogues, public reference data</td>
                                     <td><span className="dc-risk-low">Low</span><br/>No business impact</td>
                                     <td>Employee directories, inventory data, operational metrics</td>
                                     <td><span className="dc-risk-medium">Medium</span><br/>Privacy concerns, operational issues</td>
@@ -222,15 +244,7 @@ const DCIntro = () => {
                     </div>
                 </div>
                 
-                <div className="dc-back-to-top">
-                    <button 
-                        onClick={() => document.querySelector('.dc-intro-summary').scrollIntoView({ behavior: 'smooth' })}
-                        className="dc-back-to-top-btn"
-                        title="Back to Top"
-                    >
-                        ↑ Back to Top
-                    </button>
-                </div>
+                <BackToTopButton />
                 
                 <h4>🛡️ Asset-Specific Security Controls Matrix</h4>
                 <p>The following table provides guidance on typical security controls applicable for each asset type based on their data classification and corresponding risk level:</p>
@@ -261,11 +275,11 @@ const DCIntro = () => {
                             <tbody>
                                 <tr>
                                     <td><strong>📄 Printed Media</strong></td>
-                                    <td>• Standard filing<br/>• General disposal<br/>• Basic labeling</td>
+                                    <td>• Standard filing<br/>• General disposal<br/>• Basic labelling</td>
                                     <td>• Routine checks<br/>• General awareness</td>
                                     <td>• Controlled access areas<br/>• Clear desk policy<br/>• Proper disposal bins</td>
                                     <td>• Access logs<br/>• Regular audits<br/>• Staff training</td>
-                                    <td>• Locked storage<br/>• Authorized access only<br/>• Shredding required</td>
+                                    <td>• Locked storage<br/>• Authorised access only<br/>• Shredding required</td>
                                     <td>• Document tracking<br/>• Copy restrictions<br/>• Retention policies</td>
                                     <td>• Secure vault storage<br/>• Biometric access<br/>• Witnessed destruction</td>
                                     <td>• Immediate containment<br/>• Forensic analysis<br/>• Executive notification</td>
@@ -318,9 +332,9 @@ const DCIntro = () => {
                                     <td><strong>📱 Mobile Devices</strong></td>
                                     <td>• Device passwords<br/>• Basic encryption<br/>• App store restrictions</td>
                                     <td>• Usage reporting<br/>• Basic compliance</td>
-                                    <td>• MDM enrollment<br/>• App whitelisting<br/>• Remote wipe capability</td>
+                                    <td>• MDM enrolment<br/>• App whitelisting<br/>• Remote wipe capability</td>
                                     <td>• Certificate-based auth<br/>• Container separation<br/>• Jailbreak detection</td>
-                                    <td>• Advanced threat defense<br/>• VPN-only access<br/>• Behavioral analytics</td>
+                                    <td>• Advanced threat defence<br/>• VPN-only access<br/>• Behavioural analytics</td>
                                     <td>• Mobile forensics ready<br/>• Compliance reporting<br/>• Geofencing controls</td>
                                     <td>• Hardware security modules<br/>• Secure boot processes<br/>• Dedicated secure devices</td>
                                     <td>• Emergency wipe protocols<br/>• Device quarantine<br/>• Incident containment</td>
@@ -342,18 +356,10 @@ const DCIntro = () => {
                     </div>
                 </div>
                 
-                <div className="dc-back-to-top">
-                    <button 
-                        onClick={() => document.querySelector('.dc-intro-summary').scrollIntoView({ behavior: 'smooth' })}
-                        className="dc-back-to-top-btn"
-                        title="Back to Top"
-                    >
-                        ↑ Back to Top
-                    </button>
-                </div>
+                <BackToTopButton />
                 
                 <h4>🎯 Risk Classification Framework</h4>
-                <p>The risk impact levels in the matrix above aligns with standard organizational risk classifications:</p>
+                <p>The risk impact levels in the matrix above aligns with standard organisational risk classifications:</p>
                 
                 <div className="dc-classification-table-wrapper">
                     {/* Outer wrapper for horizontal scroll so that scroll bar does not hide the last row - works for Chrome and Edge, not for Firefox */}
@@ -403,15 +409,7 @@ const DCIntro = () => {
                     </div>
                 </div>
                 
-                <div className="dc-back-to-top">
-                    <button 
-                        onClick={() => document.querySelector('.dc-intro-summary').scrollIntoView({ behavior: 'smooth' })}
-                        className="dc-back-to-top-btn"
-                        title="Back to Top"
-                    >
-                        ↑ Back to Top
-                    </button>
-                </div>
+                <BackToTopButton />
                 
                 <p><strong>Classification Criteria:</strong></p>
                 <ul>
@@ -424,20 +422,12 @@ const DCIntro = () => {
                 <div>
                 </div>
                 
-                <div className="dc-back-to-top">
-                    <button 
-                        onClick={() => document.querySelector('.dc-intro-summary').scrollIntoView({ behavior: 'smooth' })}
-                        className="dc-back-to-top-btn"
-                        title="Back to Top"
-                    >
-                        ↑ Back to Top
-                    </button>
-                </div>
+                <BackToTopButton />
             </div>
             <p><b>Disclaimer:</b> The information provided here is for general informational purposes only and will require adaptation for specific businesses and business size and maturity capabilities and is not intended as legal advice. 
           Please consult with a qualified legal professional for specific legal advice tailored to your situation.</p>
           <p>Use this framework as a starting point for your own data classification efforts. It is not exhaustive and may fall short for some organisations and also may be overkill for others. 
-            It is aimed at providing guidance on related controls to consider and needs to be customised to fit your organization's unique needs, technology landscape, and requirements. 
+            It is aimed at providing guidance on related controls to consider and needs to be customised to fit your organisation's unique needs, technology landscape, and requirements. 
             In some cases being able to select multiple controls for a particular technology focus area may map closer to real world implementations but this form only allows the selection of a single control. 
             Consider what a Data Classification assessment tool should cover in terms of depth and breadth and time undertaken to perform the assessment vs what should be covered by a design.</p>
             <hr />

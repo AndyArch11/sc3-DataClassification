@@ -204,7 +204,7 @@ const DCTable = ({
                                         <th className="dc-th-security-controls">Key Management</th>
 
                                         <th className="dc-th-access-control">Authentication</th>
-                                        <th className="dc-th-access-control">Authorization</th>
+                                        <th className="dc-th-access-control">Authorisation</th>
                                         <th className="dc-th-access-control">Identity Management</th>
                                         <th className="dc-th-access-control">Specific Access Controls</th>
 

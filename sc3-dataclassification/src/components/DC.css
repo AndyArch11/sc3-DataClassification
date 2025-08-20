@@ -68,6 +68,9 @@
   padding: 24px;
   font-family: "Segoe UI", Arial, sans-serif;
   color: var(--sc3-primary);
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 320px;
 }
 
 /* Responsive main container */
@@ -77,13 +80,18 @@
     padding: 1rem;
     border-radius: var(--sc3-border-radius);
     max-width: none;
+    width: calc(100% - 2rem);
+    overflow-x: auto;
   }
 }
 
 @media (max-width: 480px) {
   .dc-main-container {
     margin: 0.5rem;
-    padding: 0.75rem;
+    padding: 12px;
+    width: calc(100% - 1rem);
+    border-radius: 4px;
+    overflow-x: auto;
   }
 }
 
@@ -118,12 +126,12 @@
   color: var(--sc3-secondary);
 }
 
-/* Back to Top button styles */
-.dc-back-to-top {
+/* Back to Top Button Styles */
+.dc-back-to-top-container {
   display: flex;
   justify-content: center;
-  margin: 2rem 0;
-  padding: 1rem 0;
+  margin: 0.5rem 0;
+  padding: 0.3rem 0;
 }
 
 .dc-back-to-top-btn {
@@ -131,7 +139,7 @@
     color: #6c757d;
     border: 1px solid #dee2e6;
     border-radius: var(--sc3-btn-radius);
-    padding: 0.6rem 1.2rem;
+    padding: 0.3rem 0.8rem;
     font-size: 0.85rem;
     font-weight: var(--sc3-btn-font-weight);
     cursor: pointer;
@@ -2482,4 +2490,9 @@
   white-space: nowrap;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transition: opacity 0.2s ease;
+}
+
+.dc-view-mode-label {
+  color: #000;
+  margin-bottom: 0.5rem;
 }

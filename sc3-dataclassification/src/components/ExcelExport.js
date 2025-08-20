@@ -17,7 +17,7 @@ const getGuidanceContent = () => {
     return [
         ['Data Classification Guidance'],
         [''],
-        ['Data Classification helps identify and evaluate the sensitivity, value, and importance of data within an organization and the risk associated with the data.'],
+        ['Data Classification helps identify and evaluate the sensitivity, value, and importance of data within an organisation and the risk associated with the data.'],
         ['This process is crucial for ensuring that data is handled appropriately, protecting sensitive information, and complying with legal and regulatory obligations.'],
         ['Data classification processes help safeguard the Confidentiality, Integrity, and Availability of data.'],
         [''],
@@ -30,7 +30,7 @@ const getGuidanceContent = () => {
         ['• Australian Privacy Principles - Guidelines for the Collection, Use, and Disclosure of Personal Information'],
         ['• GDPR - EU General Data Protection Regulation'],
         ['• HIPAA - US Health Insurance Portability and Accountability Act'],
-        ['• NIST SP 800-53 - Security and Privacy Controls for Information Systems and Organizations'],
+        ['• NIST SP 800-53 - Security and Privacy Controls for Information Systems and Organisations'],
         ['• PCI DSS - Payment Card Industry Data Security Standard'],
         [''],
         ['DATA CLASSIFICATION PROCESS (5 STEPS):'],
@@ -45,7 +45,7 @@ const getGuidanceContent = () => {
         ['   • Common categories: Public, Internal, Confidential, Restricted'],
         ['   • Define clear criteria for each classification level'],
         ['   • Use tiered approach based on potential impact if compromised'],
-        ['   • Align with organizational risk management framework'],
+        ['   • Align with organisational risk management framework'],
         [''],
         ['3. LABELING: Label data according to classification'],
         ['   • Asset owners responsible for labeling'],
@@ -55,7 +55,7 @@ const getGuidanceContent = () => {
         ['   • Capture classification decisions and rationale'],
         [''],
         ['4. HANDLING: Establish procedures based on classification'],
-        ['   • Implement ISO 27001 control categories: Organizational, People, Physical, Technological'],
+        ['   • Implement ISO 27001 control categories: Organisational, People, Physical, Technological'],
         ['   • Define roles and responsibilities for data handling'],
         ['   • Implement access controls using principle of least privilege'],
         ['   • Develop procedures for storage, transmission, and disposal'],
@@ -82,7 +82,7 @@ const getGuidanceContent = () => {
         ['DISCLAIMER:'],
         ['This information is for general guidance only and requires adaptation for specific'],
         ['business needs. Consult qualified legal professionals for specific legal advice.'],
-        ['Customize this framework to fit your organizations unique requirements.']
+        ['Customise this framework to fit your organisation\'s unique requirements.']
     ];
 };
 
@@ -117,7 +117,7 @@ const convertEntriesToWorksheetData = (entries) => {
         
         // Access Controls
         { key: 'authentication', label: 'Authentication' },
-        { key: 'authorization', label: 'Authorization' },
+        { key: 'authorization', label: 'Authorisation' },
         { key: 'identityManagement', label: 'Identity Management' },
         { key: 'accessControls', label: 'Access Controls' },
         

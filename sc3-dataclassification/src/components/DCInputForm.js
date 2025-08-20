@@ -1,6 +1,30 @@
 import React, { useState } from 'react';
 import "./DC.css";
 
+
+
+// Scroll to top function for Asset Information section
+const scrollToAssetInformation = () => {
+  const element = document.getElementById('dc-asset-information');
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+// Back to Top Button Component
+const BackToTopButton = () => (
+  <div className="dc-back-to-top-container">
+    <button 
+      type="button"
+      className="dc-back-to-top-btn"
+      onClick={scrollToAssetInformation}
+      title="Back to top of Data Classification Input Form section"
+    >
+      ↑ Back to Top
+    </button>
+  </div>
+);
+
 const DCInputForm = ({
   form,
   handleChange,
@@ -268,7 +292,7 @@ const DCInputForm = ({
             'internal': {
                 'atRestEncryption': ['basic', 'standard', 'strong', 'maximum'],
                 'databaseEncryption': ['tde-basic', 'tde-advanced', 'column-encryption', 'data-masking', 'tokenisation', 'comprehensive'],
-                'threatMonitoring': ['siem-integration', 'threat-detection', 'behavioral-analytics', 'ai-threat-hunting', 'zero-trust-monitoring'],
+                'threatMonitoring': ['siem-integration', 'threat-detection', 'behavioural-analytics', 'ai-threat-hunting', 'zero-trust-monitoring'],
                 'availabilityMonitoring': ['infrastructure-monitoring', 'application-performance', 'synthetic-monitoring', 'real-user-monitoring'],
                 'identityManagement': ['centrally-managed-individual', 'centrally-managed-service', 'centrally-managed-delegated'],
                 'monitoring': ['standard', 'enhanced', 'real-time', 'continuous'],
@@ -301,7 +325,7 @@ const DCInputForm = ({
                 'atRestEncryption': ['strong', 'maximum'],
                 'inTransitEncryption': ['standard', 'strong', 'maximum'],
                 'databaseEncryption': ['tde-advanced', 'column-encryption', 'field-level-encryption', 'tokenisation', 'data-masking', 'dynamic-masking', 'comprehensive'],
-                'threatMonitoring': ['threat-detection', 'behavioral-analytics', 'ai-threat-hunting', 'zero-trust-monitoring', 'deception-technology'],
+                'threatMonitoring': ['threat-detection', 'behavioural-analytics', 'ai-threat-hunting', 'zero-trust-monitoring', 'deception-technology'],
                 'availabilityMonitoring': ['application-performance', 'synthetic-monitoring', 'real-user-monitoring', 'distributed-tracing', 'comprehensive-observability'],
                 'identityManagement': ['centrally-managed-individual', 'centrally-managed-delegated', 'just-in-time'],
                 'authentication': ['Multi-Factor Authentication (MFA)', 'Certificate-based', 'Biometric', 'Hardware Tokens', 'Smart Cards'],
@@ -689,7 +713,7 @@ const DCInputForm = ({
               View Mode:
             </label>
             <div className="dc-view-mode-options">
-              <label>
+              <label className="dc-view-mode-label">
                 <input
                   type="radio"
                   value="basic"
@@ -698,7 +722,7 @@ const DCInputForm = ({
                 />
                 Basic (Essential fields only)
               </label>
-              <label>
+              <label className="dc-view-mode-label">
                 <input
                   type="radio"
                   value="extended"
@@ -710,7 +734,7 @@ const DCInputForm = ({
             </div>
           </div>
           
-            <fieldset className="dc-fieldset dc-fieldset-asset-info">
+            <fieldset id="dc-asset-information" className="dc-fieldset dc-fieldset-asset-info">
               <legend className="dc-legend dc-legend-asset-info">🎯 Asset Information</legend>
               <table className="dc-field-table">
                 <tbody>
@@ -939,6 +963,13 @@ const DCInputForm = ({
                         </fieldset>
                       </td>
                     </tr>
+
+                  <tr>
+                    <td colSpan="2">
+                      <BackToTopButton />
+                    </td>
+                  </tr>
+
                   {/* Security Controls Fields */}
                   <tr>
                     <td colSpan="2">
@@ -1265,7 +1296,7 @@ const DCInputForm = ({
                                   className="dc-select"
                                 >
                                   <option value="">Select identity management approach...</option>
-                                  <option value="centrally-managed-individual">Centrally Managed Individual Identities (AD/Azure AD/LDAP)</option>
+                                  <option value="centrally-managed-individual">Centrally Managed Individual Identities (AD/Entra ID/LDAP)</option>
                                   <option value="centrally-managed-service">Centrally Managed Service Accounts (Federated)</option>
                                   <option value="centrally-managed-delegated">Centrally Managed with Delegated Permissions</option>
                                   <option value="application-managed-individual">Application-Managed Individual Accounts</option>
@@ -1280,7 +1311,7 @@ const DCInputForm = ({
                                 </select>
                                 <small className="dc-field-hint">
                                   <strong>Identity Management Patterns:</strong><br/>
-                                  • <strong>Centrally Managed:</strong> Single source of truth (AD, Azure AD, LDAP) with federation<br/>
+                                  • <strong>Centrally Managed:</strong> Single source of truth (AD, Entra ID, LDAP) with federation<br/>
                                   • <strong>Application-Managed:</strong> Local application user stores without central federation<br/>
                                   • <strong>Database-Managed:</strong> Database-specific user accounts and permissions<br/>
                                   • <strong>Individual vs Shared:</strong> Unique personal accounts vs shared/generic accounts<br/>
@@ -1317,6 +1348,12 @@ const DCInputForm = ({
                           </tbody>
                         </table>
                       </fieldset>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td colSpan="2">
+                      <BackToTopButton />
                     </td>
                   </tr>
 
@@ -1675,7 +1712,7 @@ const DCInputForm = ({
                                     <option value="none">No antivirus required</option>
                                     <option value="basic">Basic antivirus (signature-based)</option>
                                     <option value="standard">Standard endpoint protection</option>
-                                    <option value="advanced">Advanced threat protection (behavioral analysis)</option>
+                                    <option value="advanced">Advanced threat protection (behavioural analysis)</option>
                                     <option value="enterprise">Enterprise EDR/XDR solution</option>
                                     <option value="next-gen">Next-gen with AI/ML detection</option>
                                 </select>
@@ -1771,7 +1808,7 @@ const DCInputForm = ({
                                       <option value="none">No application control</option>
                                       <option value="basic">Basic allow/deny lists</option>
                                       <option value="signature">Digital signature verification</option>
-                                      <option value="behavioral">Behavioral application control</option>
+                                      <option value="behavioural">Behavioural application control</option>
                                       <option value="zero-trust">Zero Trust application security</option>
                                       <option value="container">Container & runtime protection</option>
                                   </select>
@@ -1781,7 +1818,7 @@ const DCInputForm = ({
                                           <br />
                                           {form.dataClassification === 'public' && 'Basic allow/deny lists acceptable'}
                                           {form.dataClassification === 'internal' && 'Digital signature verification recommended'}
-                                          {form.dataClassification === 'confidential' && 'Behavioral application control required'}
+                                          {form.dataClassification === 'confidential' && 'Behavioural application control required'}
                                           {form.dataClassification === 'restricted' && 'Zero Trust application security with runtime protection mandatory'}
                                       </small>
                                   )}
@@ -2055,7 +2092,13 @@ const DCInputForm = ({
                       </fieldset>
                     </td>
                   </tr>
-                  
+
+                  <tr>
+                    <td colSpan="2">
+                      <BackToTopButton />
+                    </td>
+                  </tr>
+
                   {/* Remote Access Infrastructure */}
                   <tr>
                     <td colSpan="2">
@@ -2215,7 +2258,7 @@ const DCInputForm = ({
                                     <option value="standard">Session recording (metadata)</option>
                                     <option value="comprehensive">Full session recording</option>
                                     <option value="real-time">Real-time monitoring & alerts</option>
-                                    <option value="behavioral">Behavioral analytics</option>
+                                    <option value="behavioural">Behavioural analytics</option>
                                     <option value="ai-powered">AI-powered anomaly detection</option>
                                   </select>
                                   {form.dataClassification && (
@@ -2225,7 +2268,7 @@ const DCInputForm = ({
                                           {form.dataClassification === 'public' && 'Basic connection logging acceptable'}
                                           {form.dataClassification === 'internal' && 'Session recording (metadata) recommended'}
                                           {form.dataClassification === 'confidential' && 'Full session recording with real-time monitoring required'}
-                                          {form.dataClassification === 'restricted' && 'AI-powered anomaly detection with behavioral analytics mandatory'}
+                                          {form.dataClassification === 'restricted' && 'AI-powered anomaly detection with behavioural analytics mandatory'}
                                       </small>
                                   )}
                                 </td>
@@ -2292,7 +2335,7 @@ const DCInputForm = ({
                                       { value: 'basic-logging', label: 'Basic security logging' },
                                       { value: 'siem-integration', label: 'SIEM integration' },
                                       { value: 'threat-detection', label: 'Advanced threat detection' },
-                                      { value: 'behavioral-analytics', label: 'User & entity behavioral analytics (UEBA)' },
+                                      { value: 'behavioural-analytics', label: 'User & entity behavioural analytics (UEBA)' },
                                       { value: 'ai-threat-hunting', label: 'AI-powered threat hunting' },
                                       { value: 'zero-trust-monitoring', label: 'Zero-trust continuous verification' },
                                       { value: 'deception-technology', label: 'Deception technology & honeypots' },
@@ -2569,6 +2612,12 @@ const DCInputForm = ({
                           </tbody>
                         </table>
                       </fieldset>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td colSpan="2">
+                      <BackToTopButton />
                     </td>
                   </tr>
 
@@ -3133,6 +3182,12 @@ const DCInputForm = ({
                     </td>
                   </tr>
 
+                  <tr>
+                    <td colSpan="2">
+                      <BackToTopButton />
+                    </td>
+                  </tr>
+
                   {/* Zero Trust & Cloud-Native Security */}
                   <tr>
                     <td colSpan="2">
@@ -3343,6 +3398,12 @@ const DCInputForm = ({
                     </td>
                   </tr>
 
+                  <tr>
+                    <td colSpan="2">
+                      <BackToTopButton />
+                    </td>
+                  </tr>
+
                   {/* Advanced Threat & Quantum Security */}
                   <tr>
                     <td colSpan="2">
@@ -3364,7 +3425,7 @@ const DCInputForm = ({
                                 >
                                   <option value="">Select detection approach</option>
                                   <option value="basic-logging">Basic Activity Logging</option>
-                                  <option value="behavioral-analytics">User Entity and Behavioral Analytics (UEBA)</option>
+                                  <option value="behavioural-analytics">User Entity and Behavioural Analytics (UEBA)</option>
                                   <option value="ml-anomaly">ML-Based Anomaly Detection</option>
                                   <option value="real-time-monitoring">Real-Time Insider Monitoring</option>
                                   <option value="psychological-indicators">Psychological Risk Indicators</option>
@@ -3388,12 +3449,12 @@ const DCInputForm = ({
                                   <option value="">Select UEBA approach</option>
                                   <option value="basic-monitoring">Basic User Monitoring</option>
                                   <option value="statistical-analysis">Statistical Baseline Analysis</option>
-                                  <option value="ml-behavioral">ML Behavioral Modeling</option>
+                                  <option value="ml-behavioural">ML Behavioural Modeling</option>
                                   <option value="advanced-ueba">Advanced UEBA Platform</option>
                                   <option value="ai-driven-detection">AI-Driven Anomaly Detection</option>
                                   <option value="integrated-response">Integrated Response Automation</option>
                                 </select>
-                                <small className="dc-field-hint">User Entity and Behavioral Analytics (UEBA) approach for governing data access and usage</small>
+                                <small className="dc-field-hint">User Entity and Behavioural Analytics (UEBA) approach for governing data access and usage</small>
                               </td>
                             </tr>
                             <tr>
@@ -3544,7 +3605,7 @@ const DCInputForm = ({
                                   <option value="continuous-education">Continuous Data Education</option>
                                   <option value="data-culture">Data-Driven Culture Program</option>
                                 </select>
-                                <small className="dc-field-hint">Programs aimed at improving data literacy across the organization</small>
+                                <small className="dc-field-hint">Programs aimed at improving data literacy across the organisation</small>
                               </td>
                             </tr>
                             <tr>
@@ -3573,6 +3634,12 @@ const DCInputForm = ({
                           </tbody>
                         </table>
                       </fieldset>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td colSpan="2">
+                      <BackToTopButton />
                     </td>
                   </tr>
 
@@ -3869,7 +3936,7 @@ const DCInputForm = ({
                                   <option value="">Select reporting governance</option>
                                   <option value="none">No Reporting Governance</option>
                                   <option value="basic-controls">Basic Reporting Controls</option>
-                                  <option value="standardized-metrics">Standardized Metrics & KPIs</option>
+                                  <option value="standardized-metrics">Standardised Metrics & KPIs</option>
                                   <option value="certified-reports">Certified Report Repository</option>
                                   <option value="self-service-governed">Governed Self-Service Analytics</option>
                                   <option value="data-mart-governance">Data Mart Governance</option>
@@ -3884,7 +3951,13 @@ const DCInputForm = ({
                         </table>
                       </fieldset>
                     </td>
-                  </tr>              
+                  </tr>     
+
+                  <tr>
+                    <td colSpan="2">
+                      <BackToTopButton />
+                    </td>
+                  </tr>         
 
                   {/* Implementation Notes */}
                   <tr>
@@ -3928,6 +4001,12 @@ const DCInputForm = ({
                           </tbody>
                         </table>
                       </fieldset>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td colSpan="2">
+                      <BackToTopButton />
                     </td>
                   </tr>
                 </tbody>
