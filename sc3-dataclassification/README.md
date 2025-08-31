@@ -64,6 +64,7 @@ In the project folder
 
 ### `npm install`
 ### `npm install xlsx --save`
+### `npm install react-router-dom`
 
 ## Available Scripts
 
