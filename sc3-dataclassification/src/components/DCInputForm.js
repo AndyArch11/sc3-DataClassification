@@ -1,29 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./DC.css";
 
-
-
-// Scroll to top function for Asset Information section
-const scrollToAssetInformation = () => {
-  const element = document.getElementById('dc-asset-information');
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' });
-  }
-};
-
-// Back to Top Button Component
-const BackToTopButton = () => (
-  <div className="dc-back-to-top-container">
-    <button 
-      type="button"
-      className="dc-back-to-top-btn"
-      onClick={scrollToAssetInformation}
-      title="Back to top of Data Classification Input Form section"
-    >
-      ↑ Back to Top
-    </button>
-  </div>
-);
 
 const DCInputForm = ({
   form,
@@ -36,6 +13,39 @@ const DCInputForm = ({
 }) => {
     const [validationWarnings, setValidationWarnings] = useState({});
     const [viewMode, setViewMode] = useState('basic'); // View mode state
+    
+    // Scroll to top function for Asset Information section
+    const scrollToAssetInformation = () => {
+      const element = document.getElementById('dc-asset-information');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
+    // Back to Top Button Component
+    const [showBackToTop, setShowBackToTop] = useState(false);
+
+    useEffect(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 200);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+      return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+
+    const BackToTopButton = () => {
+      if (!showBackToTop) return null;
+      return (
+        <button
+          type="button"
+          onClick={scrollToAssetInformation}
+          className="dc-back-to-top-button dc-back-to-top-floating"
+          title="Back to top of Data Classification Input Form section"
+          aria-label="Back to top"
+        >
+          ↑
+        </button>
+      );
+    };
 
     const assetTypes = [
         { value: 'printed-media', label: '📄 Printed Media', icon: '📄' },
@@ -964,12 +974,6 @@ const DCInputForm = ({
                       </td>
                     </tr>
 
-                  <tr>
-                    <td colSpan="2">
-                      <BackToTopButton />
-                    </td>
-                  </tr>
-
                   {/* Security Controls Fields */}
                   <tr>
                     <td colSpan="2">
@@ -1348,12 +1352,6 @@ const DCInputForm = ({
                           </tbody>
                         </table>
                       </fieldset>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td colSpan="2">
-                      <BackToTopButton />
                     </td>
                   </tr>
 
@@ -2093,12 +2091,6 @@ const DCInputForm = ({
                     </td>
                   </tr>
 
-                  <tr>
-                    <td colSpan="2">
-                      <BackToTopButton />
-                    </td>
-                  </tr>
-
                   {/* Remote Access Infrastructure */}
                   <tr>
                     <td colSpan="2">
@@ -2471,6 +2463,9 @@ const DCInputForm = ({
                                   </option>
                               ))}
                           </select>
+                          <small className="dc-field-hint">
+                              3-2-1 backup rule of thumb: 3 copies of data, 2 local but different devices, 1 off-site. Consider the backup technology (e.g. snapshots, continuous data protection), frequency (e.g. real-time, hourly, daily), and recovery objectives (RPO/RTO).
+                          </small>
                           {form.dataClassification && (
                               <small className="dc-field-hint">
                                   {form.dataClassification === 'public' && 'Basic backups acceptable'}
@@ -2612,12 +2607,6 @@ const DCInputForm = ({
                           </tbody>
                         </table>
                       </fieldset>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td colSpan="2">
-                      <BackToTopButton />
                     </td>
                   </tr>
 
@@ -3182,12 +3171,6 @@ const DCInputForm = ({
                     </td>
                   </tr>
 
-                  <tr>
-                    <td colSpan="2">
-                      <BackToTopButton />
-                    </td>
-                  </tr>
-
                   {/* Zero Trust & Cloud-Native Security */}
                   <tr>
                     <td colSpan="2">
@@ -3395,12 +3378,6 @@ const DCInputForm = ({
                           </tbody>
                         </table>
                       </fieldset>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td colSpan="2">
-                      <BackToTopButton />
                     </td>
                   </tr>
 
@@ -3634,12 +3611,6 @@ const DCInputForm = ({
                           </tbody>
                         </table>
                       </fieldset>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td colSpan="2">
-                      <BackToTopButton />
                     </td>
                   </tr>
 
@@ -3951,13 +3922,7 @@ const DCInputForm = ({
                         </table>
                       </fieldset>
                     </td>
-                  </tr>     
-
-                  <tr>
-                    <td colSpan="2">
-                      <BackToTopButton />
-                    </td>
-                  </tr>         
+                  </tr>       
 
                   {/* Implementation Notes */}
                   <tr>
@@ -4003,14 +3968,12 @@ const DCInputForm = ({
                       </fieldset>
                     </td>
                   </tr>
-
-                  <tr>
-                    <td colSpan="2">
-                      <BackToTopButton />
-                    </td>
-                  </tr>
                 </tbody>
               </table>
+            )}
+
+            {viewMode === 'extended' && (
+              <BackToTopButton />
             )}
 
             {recommendedControls && (
