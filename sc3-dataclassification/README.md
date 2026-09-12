@@ -63,8 +63,9 @@ change to the project directory
 In the project folder
 
 ### `npm install`
-### `npm install xlsx --save`
+### `npm install exceljs`
 ### `npm install react-router-dom`
+### `npm install react-select`
 
 ## Available Scripts
 
@@ -84,10 +85,18 @@ You may also see any lint errors in the console.
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
+### `npm run lint`
+
+Performs a lint parse across the project. Ideally, there should be no lint errors.
+
+### `npm run lint:css`
+
+Performs a lint parse across the project's CSS files. These should also be clean.
+
 ### `npm run build`
 
 Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+It correctly bundles React in production mode and optimises the build for the best performance.
 
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!

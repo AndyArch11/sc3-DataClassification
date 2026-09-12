@@ -76,7 +76,7 @@ const DCIntro = () => {
                     <ol>
                         <li><strong>🔍 Identification:</strong> Identify what data you have. An inventory of all data assets should be created, including who owns the data and where and how it is stored.</li>
                             <ul>
-                                <li>It is also informative to document the data's purpose, the processes that are dependent on the data, and any applicable legal or regulatory requirements.</li>
+                                <li>It is also informative to document the data&apos;s purpose, the processes that are dependent on the data, and any applicable legal or regulatory requirements.</li>
                                 <li><strong>Map system and process dependencies:</strong> Identify all systems, applications, business processes, and workflows that depend on each data asset. This helps assess business impact and plan for continuity.</li>
                                 <li>Data can be classified by type, such as <strong>Personal Identifiable Information (PII)</strong>, <strong>financial data</strong>, <strong>intellectual property</strong>, <strong>healthcare/medical data</strong>, <strong>customer data</strong>, <strong>employee data</strong>, <strong>operational data</strong>, <strong>technical data</strong>, <strong>strategic/business data</strong>, <strong>regulatory/compliance data</strong>, <strong>research & development</strong>, <strong>legal documents</strong>, or <strong>marketing data</strong>, which may inform its data sensitivity classification.</li>
                                 <li>Understanding the data type helps determine appropriate security controls and compliance requirements (e.g., GDPR for PII, PCI DSS for payment data, HIPAA for healthcare data).</li>
@@ -86,13 +86,14 @@ const DCIntro = () => {
                             <li>Common categories include <b>public</b>, <b>internal</b>, <b>confidential</b>, and <b>restricted</b>, but more complex organisations may require more granular classifications.</li>
                             <li>Each category should have clear definitions and criteria for classification.</li>
                             <li>Consider using a tiered approach to classification, where data is assigned a level of sensitivity based on its potential impact if compromised.</li>
-                            <li>The classifications should be aligned with the organisation's overall risk management framework.</li>
+                            <li>Cross reference the data sensitivity with the impact of the data being lost or unavailable.</li>
+                            <li>The classifications should be aligned with the organisation&apos;s overall risk management framework.</li>
                             <li>Implement a process for reviewing and updating classifications as needed.</li>
                         </ul>
                         <li><strong>🏷️ Labelling:</strong> Label data according to its data classification.</li>
                         <ul>
                             <li>The asset owner is responsible for labelling the data according to its classification.</li>
-                            <li>Use labels aligned with the classification scheme to indicate the sensitivity level of the data.</li>
+                            <li>Use labels aligned with the classification scheme to indicate the sensitivity / criticality level of the data.</li>
                             <li>Labels can be physical (e.g., on paper documents) or digital (e.g., metadata, file names).</li>
                             <li>Ensure that labels are visible, easily understood, and consistently applied by all users who handle the data.</li>
                             <li>Provide training and guidance to employees on the importance of data classification and proper labelling practices.</li>
@@ -117,7 +118,7 @@ const DCIntro = () => {
                             </ul>
                             <li>Define roles and responsibilities for data handling based on classification levels.</li>
                             <li>Classify data on creation</li>
-                            <li>Implement access controls to restrict data access based on classification - use the <strong>principle of least privilege</strong> and the <strong>separation of duties</strong> principle</li>
+                            <li>Implement access controls to restrict data access based on classification - use the <strong>principle of least privilege</strong> and the <strong>separation of duties</strong> principles</li>
                             <ul>
                                 <li>Use role-based access controls (RBAC) to enforce data access policies.</li>
                                 <li>Regularly review and update access permissions to ensure they align with current classification levels.</li>
@@ -129,7 +130,7 @@ const DCIntro = () => {
                             </ul>
                             <li>Develop procedures for data storage, transmission, and disposal based on classification.</li>
                             <li>Ensure that data is encrypted or protected according to its classification level.</li>
-                            <li><strong>Database-specific protection:</strong> Implement appropriate database encryption (TDE, column-level, row-level security), data obfuscation (tokenization, masking), and ensure production data protection in non-production environments through data masking, synthetic data generation, or tokenization.</li>
+                            <li><strong>Database-specific protection:</strong> Implement appropriate database encryption (TDE, column-level, row-level security), data obfuscation (tokenisation, masking), and ensure production data protection in non-production environments through data masking, synthetic data generation, or tokenisation.</li>
                             <li>Integrate data classification into the system development lifecycle (SDLC) to ensure it is considered throughout the development process.</li>
                             <li>Establish procedures for securely sharing and transferring data.</li>
                             <li>Implement data loss prevention (DLP) measures to protect sensitive data.</li>
@@ -421,22 +422,103 @@ const DCIntro = () => {
                     
                     
                     <p><strong>Classification Criteria:</strong></p>
+                    <p>Information security is defined by the CIA triad:</p>
                     <ul>
-                        <li><strong>🌐 Public:</strong> Information intended for public consumption with no risk if disclosed (<span className="dc-risk-low">Low Risk</span>)</li>
-                        <li><strong>🏢 Internal:</strong> Information for internal use that could cause minor impact if disclosed (<span className="dc-risk-medium">Medium Risk</span>)</li>
-                        <li><strong>🔒 Confidential:</strong> Sensitive information that could cause significant harm if disclosed (<span className="dc-risk-high">High Risk</span>)</li>
-                        <li><strong>🚫 Restricted:</strong> Highly sensitive information that could cause severe damage if disclosed (<span className="dc-risk-critical">Critical Risk</span>)</li>
+                        <li><b>Sensitivity</b> (impact of disclosure)</li>
+                        <ul>
+                            <li><strong>Confidentiality:</strong> Preventing unauthorised access.</li>
+                        </ul>
+                        <li><b>Criticality</b> (impact of modification and availability)</li>
+                        <ul>
+                            <li><strong>Integrity:</strong> Preventing unauthorised modification.</li>
+                        <li><strong>Availability:</strong> Ensuring data is accessible when needed.</li>
+                        </ul>                        
+                    </ul>
+                    <p>Data classification is determined by the &quot;High Water Mark&quot; of impact across all three CIA attributes. 
+                    For the purpose of this matrix, <strong>Integrity</strong> (impact of modification) is grouped with <strong>Criticality</strong> (Availability), as both relate to the reliability of the asset for business operations.</p>
+                    <p>Mitigation strategies should address:</p>
+                    <ul>
+                        <li>Risks <em>to</em> the data: such as data exfiltration and unauthorised access.</li>
+                        <li>Risks <em>from</em> the data: such as bias, data corruption or errors, loss, or unavailability.</li>
+                        <li>Risks <em>with</em> the data: such as misuse, exploitation, ethical concerns, or compliance violations.</li>
+                    </ul>
+                    <p>Approaches to classifying data:</p>
+                    <ul>
+                        <li><strong>Content based:</strong> Subject to the contents and characteristics of the data, such as containing PII data.</li>
+                        <li><strong>Context based:</strong> Subject to the data&apos;s metadata such as origin, location, owner, and associated business processes.</li>
+                        <li><strong>User based:</strong> Manual classification by users based on their interaction and understanding of the data.</li>
                     </ul>
                     
-                    <div>
+                    <div className="dc-classification-table-wrapper">
+                        {/* Outer wrapper for horizontal scroll so that scroll bar does not hide the last row - works for Chrome and Edge, not for Firefox */}
+                        <div className="dc-classification-framework-table-scroll">
+                            <table className="dc-matrix-table">
+                                <thead>
+                                    <tr>
+                                        <th rowSpan="2" style={{verticalAlign: 'middle'}}>Criticality<br/>(Integrity & Availability)</th>
+                                        <th colSpan="4" style={{textAlign: 'center'}}>Sensitivity (Impact of Disclosure)</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Low</th>
+                                        <th>Medium</th>
+                                        <th>High</th>
+                                        <th>Critical</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Low</strong><br/>(Minor Disruption)</td>
+                                        <td className="dc-bg-public"><strong>🌐 Public</strong></td>
+                                        <td className="dc-bg-internal"><strong>🏢 Internal</strong></td>
+                                        <td className="dc-bg-confidential"><strong>🔒 Confidential</strong></td>
+                                        <td className="dc-bg-restricted"><strong>🚫 Restricted</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Medium</strong><br/>(Significant Disruption)</td>
+                                        <td className="dc-bg-internal"><strong>🏢 Internal</strong></td>
+                                        <td className="dc-bg-internal"><strong>🏢 Internal</strong></td>
+                                        <td className="dc-bg-confidential"><strong>🔒 Confidential</strong></td>
+                                        <td className="dc-bg-restricted"><strong>🚫 Restricted</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>High</strong><br/>(Major Disruption)</td>
+                                        <td className="dc-bg-confidential"><strong>🔒 Confidential</strong></td>
+                                        <td className="dc-bg-confidential"><strong>🔒 Confidential</strong></td>
+                                        <td className="dc-bg-confidential"><strong>🔒 Confidential</strong></td>
+                                        <td className="dc-bg-restricted"><strong>🚫 Restricted</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Critical</strong><br/>(Catastrophic Disruption)</td>
+                                        <td className="dc-bg-restricted"><strong>🚫 Restricted</strong></td>
+                                        <td className="dc-bg-restricted"><strong>🚫 Restricted</strong></td>
+                                        <td className="dc-bg-restricted"><strong>🚫 Restricted</strong></td>
+                                        <td className="dc-bg-restricted"><strong>🚫 Restricted</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p></p>
+                        </div>
                     </div>
+
+                    <ul>
+                        <li><strong>🌐 Public:</strong> Information intended for public consumption with no risk if disclosed, and low impact if lost. (<span className="dc-risk-low">Low Risk</span>)</li>
+                        <li><strong>🏢 Internal:</strong> Information for internal use where disclosure or loss causes minor to moderate impact. (<span className="dc-risk-medium">Medium Risk</span>)</li>
+                        <li><strong>🔒 Confidential:</strong> Sensitive information where disclosure or loss causes significant harm or major disruption. (<span className="dc-risk-high">High Risk</span>)</li>
+                        <li><strong>🚫 Restricted:</strong> Highly sensitive information where disclosure or loss causes severe damage or catastrophic failure. (<span className="dc-risk-critical">Critical Risk</span>)</li>
+                    </ul>
+                    
+                    <p>Public data may be low in sensitivity but high in criticality (e.g., public websites essential for business operations). 
+                    Conversely, some restricted data may be high in sensitivity but low in criticality (e.g., seldom accessed highly sensitive archives). 
+                    Therefore, both sensitivity and criticality must be evaluated to determine the appropriate classification and controls for each asset.
+                    </p>
                 </div>
                 <p><b>Disclaimer:</b> The information provided here is for general informational purposes only and will require adaptation for specific businesses and business size and maturity capabilities and is not intended as legal advice. 
             Please consult with a qualified legal professional for specific legal advice tailored to your situation.</p>
             <p>Use this framework as a starting point for your own data classification efforts. It is not exhaustive and may fall short for some organisations and also may be overkill for others. 
-                It is aimed at providing guidance on related controls to consider and needs to be customised to fit your organisation's unique needs, technology landscape, and requirements. 
-                In some cases being able to select multiple controls for a particular technology focus area may map closer to real world implementations but this form only allows the selection of a single control. 
+                It is aimed at providing guidance on related controls to consider and requires customisation to fit your organisation&apos;s unique needs, technology landscape, and requirements. 
+                In some cases a field may only allow the selection of a single option when there are multiple that apply - select the least secure option that is applicable.
                 Consider what a Data Classification assessment tool should cover in terms of depth and breadth and time undertaken to perform the assessment vs what should be covered by a design.</p>
+            <p>N.B. A Data Classification should be considered with respect to both Data Sensitivity (impact of unauthorised disclosure) and Data Criticality (impact of loss causing disruption to the business), which are related but distinct concepts. Careful consideration is needed to ensure the selection of appropriate security controls, access rules, and compliance measures to match.</p>
             <hr />
         </details>
         <BackToTopButton />

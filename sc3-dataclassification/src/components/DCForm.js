@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./DC.css";
 import DCIntro from './DCIntro';
 import DCInputForm from './DCInputForm';
 import DCTable from './DCTable';
 import DCReport from './DCReport';
 
-const Version = "v0.1.4";
+const Version = "v0.1.5";
 
 // Helper to get today's date in YYYY-MM-DD format
 const getToday = () => {
@@ -24,11 +24,41 @@ const getTwelveMonthsFromToday = () => {
   return `${d.getFullYear()}-${month}-${day}`;
 };
 
+// Helper to compute data classification from sensitivity and criticality (high water mark)
+const computeDataClassification = (sensitivity, criticality) => {
+  if (!sensitivity || !criticality) {
+    return '';
+  }
+  
+  const levels = {
+    'public': 1,
+    'internal': 2,
+    'confidential': 3,
+    'restricted': 4
+  };
+  
+  const maxLevel = Math.max(
+    levels[sensitivity?.toLowerCase()] || 0,
+    levels[criticality?.toLowerCase()] || 0
+  );
+  
+  const levelToValue = {
+    1: 'public',
+    2: 'internal',
+    3: 'confidential',
+    4: 'restricted'
+  };
+  
+  return levelToValue[maxLevel] || '';
+};
+
 // Initial form structure to match DCInputForm requirements
 const initialForm = {
   assetName: "",
   assetType: "",
   dataType: "",
+  dataSensitivity: "",     
+  dataCriticality: "",     
   dataClassification: "",
   description: "",
   dependencies: "",
@@ -41,58 +71,84 @@ const initialForm = {
   // Security Controls
   atRestEncryption: "",
   inTransitEncryption: "",
-  databaseEncryption: "",
+  databaseEncryption: [],
   encryptionCipher: "",
   hashAlgorithm: "",
   keyManagement: "",
+  keyManagementProcesses: [],
+  secretsManagement: [],
 
 // Access Controls
-  authentication: "",
-  authorization: "",
-  identityManagement: "",
+  authentication: [],
+  authorisation: [],
+  identityManagement: [],
   accessControls: "",
   
   // Advanced Security Controls
-  wafControls: "",
-  dlpControls: "",
+  wafControls: [],
+  apiSecurityGateway: [],
+  dlpControls: [],
+  privilegedSessionManagement: "",
+  threatIntelligenceIntegration: "",
+  threatModeling: [],
+  soar: "",
+  siem: "",
   casbControls: "",
   sseControls: "",
-  cloudNetworkSecurity: "",
+  cloudNetworkSecurity: [],
   sdwanControls: "",
   saseArchitecture: "",
   zeroTrustMaturity: "",
-  networkSecurity: "",
+  networkSecurity: [],
   protocolGapCoverage: "",
   
   // Application Security
   antivirusControls: "",
   vulnerabilityScanning: "",
+  applicationTesting: [],
+  applicationSecurityTesting: [],
   certificateManagement: "",
   applicationControl: "",
-  patchManagement: "",
-  codeIntegrity: "",
-  osHardening: "",
-  osEncryption: "",
+  patchManagement: [],
+  codeIntegrity: [],
+  sca: [],
+  ossLicenceCompliance: [],
+  secretsScanningRepos: [],
+  ciCdPipelineSecurity: [],
+  applicationLogging: "",
+  secureHeadersTransport: [],
+  sessionManagementHardening: [],
+  osHardening: [],
+  osEncryption: [],
   
   // Mobile Security
   mdmControls: "",
   mamControls: "",
   byodPolicy: "",
-  mobileDataProtection: "",
+  mobileDataProtection: [],
   
   // Remote Access
-  vdiSolution: "",
+  vdiSolution: [],
   jumpHosts: "",
-  remoteAccessPolicy: "",
+  remoteAccessPolicy: [],
   sessionIsolation: "",
   remoteAccessMonitoring: "",
   privilegedAccessManagement: "",
+  vpnAccessControls: [],
+  ztnaAccess: [],
   
   // Monitoring & Logging
   monitoring: "",
   threatMonitoring: "",
-  availabilityMonitoring: "",
+  availabilityMonitoring: [],
   auditLogging: "",
+  penetrationTesting: "",
+  socCapability: "",
+  complianceAutomation: "",
+  securityMetrics: [],
+  auditTrailRetention: "",
+  changeManagementIntegration: "",
+  securityTestingFrequency: "",
 
   // Data Lifecycle
   backupStrategy: "",
@@ -100,6 +156,13 @@ const initialForm = {
   backupRetentionPeriod: "",
   archivePolicy: "",
   disposalMethod: "",
+  dataVersioningStrategy: "",
+  dataRedundancyLevel: "",
+  haDrTestingFrequency: "",
+  backupTestingFrequency: "",
+  dataMigrationStrategy: "",
+  dataEolProcess: "",
+  dataDowngradeControls: "",
     
   // Compliance
   complianceRequirements: "",
@@ -110,12 +173,26 @@ const initialForm = {
   rto: "",
   rpo: "",
   incidentResponse: "",
+  architectureGovernance: "",
+  thirdPartyRiskManagement: [],
+  dpaStatus: "",
+  regulatoryReporting: "",
+  auditFrequency: "",
+  dataResidency: "",
     
   // Additional Modern Security Controls
   dataDiscoveryAutomation: "",
   contentBasedClassification: "",
   dataFlowMapping: "",
   sensitiveDataScanning: "",
+  dataSecurityPostureManagement: "",
+  dlpAutomation: "",
+  dataLabelingTaggingAutomation: "",
+  dataPolicyEnforcementAutomation: "",
+  soarDataIncidents: "",
+  automatedComplianceReporting: "",
+  automatedDataLifecycle: "",
+  apiSecurityDataFlowMonitoring: "",
   
   // Privacy Engineering
   privacyByDesign: "",
@@ -139,9 +216,19 @@ const initialForm = {
   
   // Australian Accessibility Compliance (DDA)
   accessibilityCompliance: "",
-  assistiveTechnologySupport: "",
-  inclusiveDataAccessDesign: "",
-  workplaceAccessibilityAccommodation: "",
+  assistiveTechnologySupport: [],
+  inclusiveDataAccessDesign: [],
+  workplaceAccessibilityAccommodation: [],
+  
+  // Privacy Rights & Consent Management
+  consentWithdrawalMechanism: "",
+  privacyTrainingAwareness: "",
+  automatedPrivacyControlsPets: "",
+  crossBorderDataTransferCompliance: "",
+  
+  // Intellectual Property & Data Sovereignty
+  copyrightFairUseCompliance: [],
+  indigenousDataSovereignty: [],
   
   // Zero Trust Data Security
   dataMicrosegmentation: "",
@@ -151,18 +238,29 @@ const initialForm = {
   deviceTrustVerification: "",
   
   // Cloud-Native Security
-  containerDataProtection: "",
+  containerDataProtection: [],
   serverlessDataSecurity: "",
   multiCloudDataGovernance: "",
   cspmDataAssets: "",
   iacSecurityScanning: "",
+  cloudEgressControls: "",
+  cloudIngressControls: "",
+  workloadIdentityFederation: "",
   
   // AI/ML Data Protection
   trainingDataProtection: "",
   modelDataLeakagePrevention: "",
   aiGovernance: "",
   algorithmicBiasDetection: "",
-  federatedLearningSecurity: "",
+  aiModelExplainability: "",
+  aiModelCards: "",
+  humanInLoopAi: "",
+  aiSafetyAdversarial: "",
+  aiDataLineage: "",
+  modelVersioningRollback: "",
+  aiModelDrift: "",
+  thirdPartyAiRisk: "",
+  aiSupplyChainTransparency: "",
   
   // Supply Chain Security
   thirdPartyDataProcessing: "",
@@ -170,6 +268,16 @@ const initialForm = {
   supplyChainDataMapping: "",
   sbomDataProcessing: "",
   dataResidencyRequirements: "",
+  buildProvenanceSigning: "",
+  secureDevPracticesSsdf: "",
+  vulnerabilityDisclosureSla: "",
+  supplierSecurityAssurance: [],
+  dependencyPolicyEnforcement: "",
+  runtimeSupplyChainControls: "",
+  fourthPartyFlowdown: "",
+  thirdPartyAccessArchitecture: "",
+  incidentBreachNotification: "",
+  vendorStabilityMarketPosition: "",
   
   // Advanced Threat Protection
   insiderThreatDetection: "",
@@ -177,6 +285,10 @@ const initialForm = {
   deceptionTechnologies: "",
   aptDetectionDataExfiltration: "",
   dataCentricSecurityOrchestration: "",
+  ransomwareDataExtortionDefense: [],
+  deceptionTechnologiesData: "",
+  homomorphicConfidentialComputing: "",
+  cryptographicKeyLifecycle: [],
   
   // Quantum-Ready Security
   postQuantumCryptography: "",
@@ -204,6 +316,12 @@ const initialForm = {
   dataAccessBalancing: "",
   dataLiteracyPrograms: "",
   controlledDataSharing: "",
+  dataCatalogDiscovery: "",
+  dynamicDataMaskingSelfService: "",
+  dataAccessRequestWorkflow: "",
+  dataUsageAnalytics: "",
+  dataEntitlementModel: "",
+  dataAccessRecertification: "",
 
   // Data Governance & Management
   dataLineageTracking: "",
@@ -214,6 +332,13 @@ const initialForm = {
   dataGovernanceFramework: "",
   dataFlowDocumentation: "",
   reportingAnalyticsGovernance: "",
+  dataOwnershipAccountability: "",
+  dataStandardsConventions: "",
+  dataGlossaryBusinessTerms: "",
+  dataGovernanceCouncil: "",
+  dataIssueExceptionManagement: "",
+  dataValueRoiMeasurement: "",
+  dataEthicsResponsibleUse: "",
 
   // Implementation Notes
   implementationNotes: "",  
@@ -227,20 +352,35 @@ const DCForm = () => {
   const [fieldsOpen, setFieldsOpen] = useState(false);
   const [dcOpen, setDcOpen] = useState(false);
   const [selectedDCIndex, setSelectedDCIndex] = useState(null);
-  const [isEditingDC, setIsEditingDC] = useState(false);
+  const [, setIsEditingDC] = useState(false);
   const [dcFieldsOpen, setDCFieldsOpen] = useState(false);
   const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
-  const [submitted, setSubmitted] = useState(false);
+  const [, setSubmitted] = useState(false);
 
   // Drag and drop state for reordering risks
   const [draggedEntryIndex, setDraggedEntryIndex] = useState(null);
-  const [dragOverIndex, setDragOverIndex] = useState(null);
   const [dropTargetIndex, setDropTargetIndex] = useState(null);
 
-  const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
-
-  const updatedEntries = [...entries];
-  const draggedEntry= updatedEntries[draggedEntryIndex];
+  // Compute derived dataClassification whenever sensitivity or criticality changes
+  useEffect(() => {
+    if (form.dataSensitivity || form.dataCriticality) {
+      const computed = computeDataClassification(form.dataSensitivity, form.dataCriticality);
+      if (computed && computed !== form.dataClassification) {
+        setForm(prev => ({
+          ...prev,
+          dataClassification: computed
+        }));
+      }
+    } else {
+      // Clear classification if both inputs are empty
+      if (form.dataClassification) {
+        setForm(prev => ({
+          ...prev,
+          dataClassification: ''
+        }));
+      }
+    }
+  }, [form.dataSensitivity, form.dataCriticality, form.dataClassification]);
 
   // Handle form field changes
   const handleChange = (e) => {
@@ -283,7 +423,26 @@ const DCForm = () => {
 
   // Handle editing an existing entry
   const handleEdit = (index) => {
-    setForm(entries[index]);
+    const entry = entries[index];
+    // Backward-compatibility shim: normalise fields that are now multi-select
+    const normalised = { ...entry };
+    if (normalised.osHardening && !Array.isArray(normalised.osHardening)) {
+      normalised.osHardening = [normalised.osHardening];
+    }
+    if (normalised.vdiSolution && !Array.isArray(normalised.vdiSolution)) {
+      normalised.vdiSolution = [normalised.vdiSolution];
+    }
+    if (normalised.remoteAccessPolicy && !Array.isArray(normalised.remoteAccessPolicy)) {
+      normalised.remoteAccessPolicy = [normalised.remoteAccessPolicy];
+    }
+
+    // Backward compatibility for existing entries without sensitivity/criticality
+    if (!normalised.dataSensitivity && !normalised.dataCriticality && normalised.dataClassification) {
+      normalised.dataSensitivity = normalised.dataClassification;
+      normalised.dataCriticality = normalised.dataClassification;
+    }
+
+    setForm(normalised);
     setEditIndex(index);
     setFieldsOpen(true);
   };
@@ -308,10 +467,6 @@ const DCForm = () => {
   };
 
   const handleNewDataClassification = () => {
-    console.log('handleNewDataClassification called');
-    console.log('Current fieldsOpen:', fieldsOpen);
-    console.log('Current entries.length:', entries.length);
-    
     // Clear all state first
     setForm(initialForm);
     setEditIndex(null);
@@ -320,8 +475,6 @@ const DCForm = () => {
     setDCFieldsOpen(true);
     // Force the form to open
     setFieldsOpen(true);
-    
-    console.log('After setting fieldsOpen to true');
   };
 
   const handleMoveDC = (fromIndex, toIndex) => {

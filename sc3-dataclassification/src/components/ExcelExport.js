@@ -1,73 +1,89 @@
-import * as XLSX from 'xlsx';
+import * as ExcelJS from 'exceljs';
 
 // Main export function
 export const exportDCToExcel = (entries) => {
     try {
         // Create a new workbook
-        const workbook = XLSX.utils.book_new();
+        const workbook = new ExcelJS.Workbook();
+        workbook.creator = 'SC3 Data Classification Tool';
+        workbook.lastModifiedBy = 'SC3 Data Classification Tool';
+        workbook.created = new Date();
+        workbook.modified = new Date();
         
         // Create guidance worksheet
         const guidanceData = getGuidanceContent();
-        const guidanceWorksheet = XLSX.utils.aoa_to_sheet(guidanceData);
+        const guidanceWorksheet = workbook.addWorksheet('Data Classification Guidance');
+        
+        // Add guidance data to worksheet
+        guidanceWorksheet.addRows(guidanceData);
         
         // Style the guidance worksheet header
-        if (guidanceWorksheet['A1']) {
-            guidanceWorksheet['A1'].s = {
-                font: { bold: true, sz: 16, color: { rgb: "FFFFFF" } },
-                fill: { fgColor: { rgb: "2F5233" } },
-                alignment: { horizontal: "center" }
+        if (guidanceWorksheet.getRow(1).cellCount > 0) {
+            const headerCell = guidanceWorksheet.getRow(1).getCell(1);
+            headerCell.font = { bold: true, size: 16, color: { rgb: "FFFFFF" } };
+            headerCell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { rgb: "2F5233" }
             };
+            headerCell.alignment = { horizontal: 'center' };
         }
-        
-        // Add guidance worksheet to workbook
-        XLSX.utils.book_append_sheet(workbook, guidanceWorksheet, 'Data Classification Guidance');
         
         // Create entries worksheet
         const entriesData = convertEntriesToWorksheetData(entries);
-        const entriesWorksheet = XLSX.utils.aoa_to_sheet(entriesData);
+        const entriesWorksheet = workbook.addWorksheet('Data Classification Entries');
+        
+        // Add entries data to worksheet
+        entriesWorksheet.addRows(entriesData);
         
         // Auto-size columns for entries worksheet
-        const maxWidth = entriesData[0] ? entriesData[0].length : 0;
-        const colWidths = [];
-        for (let i = 0; i < maxWidth; i++) {
-            let maxLength = 0;
-            entriesData.forEach(row => {
-                if (row[i] && row[i].toString().length > maxLength) {
-                    maxLength = row[i].toString().length;
-                }
-            });
-            colWidths.push({ width: Math.min(Math.max(maxLength + 2, 10), 50) });
+        if (entriesData.length > 0 && entriesData[0]) {
+            const maxWidth = entriesData[0].length;
+            for (let i = 1; i <= maxWidth; i++) {
+                let maxLength = 10; // Minimum width
+                entriesData.forEach(row => {
+                    if (row[i-1] && row[i-1].toString().length > maxLength) {
+                        maxLength = row[i-1].toString().length;
+                    }
+                });
+                entriesWorksheet.getColumn(i).width = Math.min(Math.max(maxLength + 2, 10), 50);
+            }
         }
-        entriesWorksheet['!cols'] = colWidths;
         
         // Style the entries worksheet header
         if (entriesData.length > 0 && entriesData[0]) {
-            entriesData[0].forEach((header, index) => {
-                const cellRef = XLSX.utils.encode_cell({ r: 0, c: index });
-                if (entriesWorksheet[cellRef]) {
-                    entriesWorksheet[cellRef].s = {
-                        font: { bold: true, color: { rgb: "FFFFFF" } },
-                        fill: { fgColor: { rgb: "2F5233" } },
-                        alignment: { horizontal: "center" }
-                    };
-                }
+            const headerRow = entriesWorksheet.getRow(1);
+            headerRow.eachCell((cell) => {
+                cell.font = { bold: true, color: { rgb: "FFFFFF" } };
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { rgb: "2F5233" }
+                };
+                cell.alignment = { horizontal: 'center' };
             });
         }
-        
-        // Add entries worksheet to workbook
-        XLSX.utils.book_append_sheet(workbook, entriesWorksheet, 'Data Classification Entries');
         
         // Generate filename with timestamp
         const now = new Date();
         const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, -5); // Format: YYYY-MM-DDTHH-MM-SS
         const filename = `SC3_Data_Classification_Export_${timestamp}.xlsx`;
         
-        // Write the file
-        XLSX.writeFile(workbook, filename);
-        
-        console.log(`Excel file "${filename}" has been generated and downloaded successfully.`);
+        // Generate and download the file
+        workbook.xlsx.writeBuffer().then((buffer) => {
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        });
         
     } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Error creating Excel export:', error);
         alert('An error occurred while creating the Excel file. Please try again.');
     }
@@ -159,37 +175,39 @@ const convertEntriesToWorksheetData = (entries) => {
 
     const sectionHeaders = [
         'Data Classification Details',
-        '', '', '', '', '', '', '', '', '', '', //{11}
+        '', '', '', '', '', '', '', '', '', '', '', '', //{13}
         'Security Controls',
-        '', '', '', '', '', //{6}
+        '', '', '', '', '', '', '',  //{8}
         'Access Controls',
         '', '', '', //{4}
         'Advanced Security Controls',
-        '', '', '', '', '', '', '', '', '', //{10}
-        'Application Security Controls',
-        '', '', '', '', '', '', '', '', '', '', '', //{12}
-        'Remote Access Infrastructure',
-        '', '', '', '', '', //{6}
-        'Monitoring & Compliance',
-        '', '', //{3}
-        'Data Lifecycle', 
-        '', '', '', '', //{5}
-        'Compliance and Governance',
-        '', '', '', '', '', //{6}
-        'Privacy Engineering and Rights Management',
         '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', //{16}
-        'Zero Trust & Cloud-Native Data Security',
-        '', '', '', //{4}
-        'AI/ML & Supply Chain Data Security',
-        '', '', '', //{4}
-        'Advanced Threat Protection & Quantum-Ready Security',
-        '', '', '', //{4}
-        'Data Democratisation vs Controlled Access',
-        '', '', '', '', //{5}
-        'Modern Data Security & Automation',
-        '', '', //{3}
-        'Data Governance & Management',
+        'Application Security Controls',
+        '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',  //{21}
+        'Remote Access Infrastructure',
         '', '', '', '', '', '', '', //{8}
+        'Monitoring & Compliance',
+        '', '', '', '', '', '', '', '', '', //{10}
+        'Data Lifecycle', 
+        '', '', '', '', '', '', '', '', '', '', '', //{12}
+        'Compliance and Governance',
+        '', '', '', '', '', '', '', '', '', '', '', //{12}
+        'Privacy Engineering and Rights Management',
+        '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', //{22}
+        'Zero Trust & Cloud-Native Data Security',
+        '', '', '', '', '', '', '', '', '', '', '', '', //{13}
+        'AI/ML Data Security & Responsible AI',
+        '', '', '', '', '', '', '', '', '', '', '', '', //{13}
+        'Supply Chain Data Security & Third-Party Risk',
+        '', '', '', '', '', '', '', '', '', '', '', '', //{13}
+        'Advanced Threat Protection & Quantum-Ready Security',
+        '', '', '', '', '', '', '', '', //{9}
+        'Data Democratisation vs Controlled Access',
+        '', '', '', '', '', '', '', '', '', '', //{11}
+        'Modern Data Security & Automation',
+        '', '', '', '', '', '', '', '', '', '', //{11}
+        'Data Governance & Management',
+        '', '', '', '', '', '', '', '', '', '', '', '', '', '', //{15}
         'Implementation Notes',
         '' //{2}
     ];
@@ -200,7 +218,9 @@ const convertEntriesToWorksheetData = (entries) => {
         { key: 'assetName', label: 'Asset Name' },
         { key: 'assetType', label: 'Asset Type' },
         { key: 'dataType', label: 'Data Type' },
-        { key: 'dataClassification', label: 'Data Classification' },
+        { key: 'dataSensitivity', label: 'Data Sensitivity' },                    
+        { key: 'dataCriticality', label: 'Data Criticality' },                    
+        { key: 'dataClassification', label: 'Data Classification (Derived)' },    
         { key: 'description', label: 'Description' },
         { key: 'dependencies', label: 'Dependencies' },
         { key: 'dataOwner', label: 'Data Owner' },
@@ -216,16 +236,24 @@ const convertEntriesToWorksheetData = (entries) => {
         { key: 'encryptionCipher', label: 'Encryption Cipher' },
         { key: 'hashAlgorithm', label: 'Hash Algorithm' },
         { key: 'keyManagement', label: 'Key Management' },
+        { key: 'keyManagementProcesses', label: 'Key Management Processes' },
+        { key: 'secretsManagement', label: 'Secrets Management' },
         
         // Access Controls
         { key: 'authentication', label: 'Authentication' },
-        { key: 'authorization', label: 'Authorisation' },
+        { key: 'authorisation', label: 'Authorisation' },
         { key: 'identityManagement', label: 'Identity Management' },
-        { key: 'accessControls', label: 'Specific Access Controls' },
+        { key: 'specificAccessControls', label: 'Specific Access Controls' },
         
         // Advanced Security Controls
         { key: 'wafControls', label: 'WAF Controls' },
+        { key: 'apiSecurityGateway', label: 'API Security Gateway' },
         { key: 'dlpControls', label: 'DLP Controls' },
+        { key: 'privilegedSessionManagement', label: 'Privileged Session Management' },
+        { key: 'threatIntelligenceIntegration', label: 'Threat Intelligence Integration' },
+        { key: 'threatModeling', label: 'Threat Modeling' },
+        { key: 'soar', label: 'SOAR' },
+        { key: 'siem', label: 'SIEM' },
         { key: 'casbControls', label: 'CASB Controls' },
         { key: 'sseControls', label: 'SSE Controls' },
         { key: 'cloudNetworkSecurity', label: 'Cloud Network Security' },
@@ -238,10 +266,19 @@ const convertEntriesToWorksheetData = (entries) => {
         // Application Security Controls
         { key: 'antivirusControls', label: 'Antivirus Controls' },
         { key: 'vulnerabilityScanning', label: 'Vulnerability Scanning' },
-        { key: 'certificateManagement', label: 'Certificate Lifecycle' },
+        { key: 'applicationTesting', label: 'Application Testing' },
+        { key: 'applicationSecurityTesting', label: 'Application Security Testing' },
+        { key: 'applicationLogging', label: 'Application Logging & Telemetry' },
+        { key: 'secureHeadersTransport', label: 'Secure Headers & Transport' },
+        { key: 'sessionManagementHardening', label: 'Session Management Hardening' },
+        { key: 'certificateLifecycle', label: 'Certificate Lifecycle' },
         { key: 'applicationControl', label: 'Application Control' },
         { key: 'patchManagement', label: 'Patch Management' },
         { key: 'codeIntegrity', label: 'Code Integrity' },
+        { key: 'sca', label: 'SCA (Software Composition Analysis)' },
+        { key: 'ossLicenceCompliance', label: 'OSS Licence Compliance' },
+        { key: 'secretsScanningRepos', label: 'Secrets Scanning (Code Repos)' },
+        { key: 'ciCdPipelineSecurity', label: 'CI/CD Pipeline Security' },
         { key: 'osHardening', label: 'OS Hardening' },
         { key: 'osEncryption', label: 'OS Encryption' },
         { key: 'mdmControls', label: 'MDM Controls' },
@@ -251,6 +288,8 @@ const convertEntriesToWorksheetData = (entries) => {
         
         // Remote Access Infrastructure
         { key: 'vdiSolution', label: 'VDI Solution' },
+        { key: 'vpnAccessControls', label: 'VPN Access Controls' },
+        { key: 'ztnaAccess', label: 'ZTNA Access' },
         { key: 'jumpHosts', label: 'Jump Hosts' },
         { key: 'remoteAccessPolicy', label: 'Remote Access Policy' },
         { key: 'sessionIsolation', label: 'Session Isolation' },
@@ -261,13 +300,27 @@ const convertEntriesToWorksheetData = (entries) => {
         { key: 'threatMonitoring', label: 'Threat Monitoring' },
         { key: 'availabilityMonitoring', label: 'Availability Monitoring' },
         { key: 'auditLogging', label: 'Audit Logging' },
+        { key: 'penetrationTesting', label: 'Penetration Testing' },
+        { key: 'socCapability', label: 'SOC Capability' },
+        { key: 'complianceAutomation', label: 'Compliance Automation' },
+        { key: 'securityMetrics', label: 'Security Metrics' },
+        { key: 'auditTrailRetention', label: 'Audit Trail Retention' },
+        { key: 'changeManagementIntegration', label: 'Change Management Integration' },
+        { key: 'securityTestingFrequency', label: 'Security Testing Frequency' },
         
         // Data Lifecycle Management
+        { key: 'dataMigrationStrategy', label: 'Data Migration Strategy' },
+        { key: 'dataDowngradeControls', label: 'Data Downgrade Controls' },
+        { key: 'dataVersioningStrategy', label: 'Data Versioning Strategy' },
+        { key: 'dataRedundancyLevel', label: 'Data Redundancy Level' },
+        { key: 'haDrTestingFrequency', label: 'HA/DR Testing Frequency' },
         { key: 'backupStrategy', label: 'Backup Strategy' },
-        { key: 'dataRetentionPeriod', label: 'Data Retention Period' },
+        { key: 'backupTestingFrequency', label: 'Backup Testing Frequency' },
         { key: 'backupRetentionPeriod', label: 'Backup Retention Period' },
+        { key: 'dataRetentionPolicy', label: 'Data Retention Policy' },
         { key: 'archivePolicy', label: 'Archive Policy' },
-        { key: 'disposalMethod', label: 'Disposal Method' },
+        { key: 'dataEolProcess', label: 'EOL Process' },
+        { key: 'dataDisposalMethod', label: 'Disposal Method' },
         
         // Compliance and Governance
         { key: 'complianceRequirements', label: 'Compliance Requirements' },
@@ -276,20 +329,32 @@ const convertEntriesToWorksheetData = (entries) => {
         { key: 'rto', label: 'RTO' },
         { key: 'rpo', label: 'RPO' },
         { key: 'incidentResponse', label: 'Incident Response' },
+        { key: 'architectureGovernance', label: 'Architecture Governance' },
+        { key: 'thirdPartyRiskManagement', label: 'Third-Party Risk Management' },
+        { key: 'dpaStatus', label: 'DPA Status' },
+        { key: 'regulatoryReporting', label: 'Regulatory Reporting' },
+        { key: 'auditFrequency', label: 'Audit Frequency' },
+        { key: 'dataResidency', label: 'Data Residency' },
         
         // Privacy Engineering and Rights Management
         { key: 'privacyByDesign', label: 'Privacy By Design' },
+        { key: 'automatedPrivacyControlsPets', label: 'Automated Privacy Controls & PETs' },
         { key: 'dataMinimisation', label: 'Data Minimisation' },
         { key: 'appDataCollectionLimitations', label: 'APP Data Collection Limitations' },
         { key: 'appSolicitedUnsolicited', label: 'APP Solicited Unsolicited' },
         { key: 'appCollectionNotice', label: 'APP Collection Notice' },
-        { key: 'appThirdPartyCollection', label: 'APP Third Party Collection' },
+        { key: 'appNotificationRequirements', label: 'APP Notification Requirements' },
+        { key: 'appThirdPartyCollection', label: 'APP Third Party Collection' },      
+        { key: 'crossBorderDataTransferCompliance', label: 'Cross-Border Data Transfer Compliance' },
         { key: 'consentManagement', label: 'Consent Management' },
+        { key: 'consentWithdrawalMechanism', label: 'Consent Withdrawal Mechanism' },
         { key: 'appCustomerAccess', label: 'APP Customer Access' },
         { key: 'appDataCorrection', label: 'APP Data Correction' },
         { key: 'appDataRetentionDisposal', label: 'APP Data Retention Disposal' },
         { key: 'rightToErasure', label: 'Right To Erasure' }, 
-        { key: 'appNotificationRequirements', label: 'APP Notification Requirements' },
+        { key: 'privacyTrainingAwareness', label: 'Privacy Training & Awareness' }, 
+        { key: 'copyrightFairUseCompliance', label: 'Copyright & Fair Use Compliance' }, 
+        { key: 'indigenousDataSovereignty', label: 'Indigenous Data Sovereignty' },
         { key: 'accessibilityCompliance', label: 'Accessibility Compliance' },
         { key: 'assistiveTechnologySupport', label: 'Assistive Technology Support' },
         { key: 'inclusiveDataAccessDesign', label: 'Inclusive Data Access Design' },
@@ -300,18 +365,56 @@ const convertEntriesToWorksheetData = (entries) => {
         { key: 'containerDataProtection', label: 'Container Data Protection' },
         { key: 'multiCloudDataGovernance', label: 'Multi-Cloud Data Governance' },
         { key: 'iacSecurityScanning', label: 'IaC Security Scanning' },
+        { key: 'continuousVerification', label: 'Continuous Verification' },
+        { key: 'justInTimeDataAccess', label: 'Just-in-Time Data Access' },
+        { key: 'riskBasedAuthentication', label: 'Risk-Based Authentication' },
+        { key: 'deviceTrustVerification', label: 'Device Trust Verification' },
+        { key: 'serverlessDataSecurity', label: 'Serverless Data Security' },
+        { key: 'cspmDataAssets', label: 'Cloud DSPM for Data Assets' },
+        { key: 'cloudEgressControls', label: 'Cloud Egress & Private Connectivity' },
+        { key: 'cloudIngressControls', label: 'Cloud Ingress & Public Exposure' },
+        { key: 'workloadIdentityFederation', label: 'Workload Identity Federation' },
 
-        //  AI/ML & Supply Chain Data Security
+    //  AI/ML Data Security & Responsible AI
         { key: 'trainingDataProtection', label: 'Training Data Protection' },
         { key: 'aiGovernance', label: 'AI Governance' }, 
+        { key: 'aiModelExplainability', label: 'AI Model Explainability & Transparency' },
+        { key: 'algorithmicBiasDetection', label: 'Algorithmic Bias Detection & Mitigation' },
+        { key: 'aiModelCards', label: 'AI Model Card & Documentation' },
+        { key: 'humanInLoopAi', label: 'Human-in-the-Loop for High-Risk Decisions' },
+        { key: 'modelDataLeakagePrevention', label: 'Model Output Monitoring & Data Leakage Prevention' },
+        { key: 'aiSafetyAdversarial', label: 'AI Safety & Adversarial Robustness' },
+        { key: 'aiDataLineage', label: 'AI Data Lineage & Provenance' },
+        { key: 'modelVersioningRollback', label: 'Model Versioning & Rollback Controls' },
+        { key: 'aiModelDrift', label: 'AI Model Drift Detection & Retraining' },
+        { key: 'thirdPartyAiRisk', label: 'Third-Party AI/ML Model Risk Assessment' },
+        { key: 'aiSupplyChainTransparency', label: 'AI Supply Chain Transparency (SBOM for AI)' },
+
+        // Supply Chain Data Security & Third-Party Risk
         { key: 'thirdPartyDataProcessing', label: 'Third-Party Data Processing' },
         { key: 'supplyChainDataMapping', label: 'Supply Chain Data Mapping' },
+        { key: 'buildProvenanceSigning', label: 'Build Provenance & Artifact Signing (SLSA)' },
+        { key: 'secureDevPracticesSsdf', label: 'Secure Development Practices (NIST SSDF)' },
+        { key: 'vulnerabilityDisclosureSla', label: 'Vulnerability Disclosure & Patch SLAs' },
+        { key: 'supplierSecurityAssurance', label: 'Supplier Security Assurance Evidence' },
+        { key: 'dependencyPolicyEnforcement', label: 'Artifact/Dependency Policy Enforcement' },
+        { key: 'runtimeSupplyChainControls', label: 'Runtime Supply Chain Controls (Containers/Images)' },
+        { key: 'fourthPartyFlowdown', label: 'Fourth-Party Flowdown & Oversight' },
+        { key: 'dataResidencyRequirements', label: 'Data Residency & Sovereignty Attestation' },
+        { key: 'thirdPartyAccessArchitecture', label: 'Third-Party Access Architecture (Vendors)' },
+        { key: 'incidentBreachNotification', label: 'Incident/Breach Notification Obligations' },
+        { key: 'vendorStabilityMarketPosition', label: 'Vendor Stability & Market Position' },
 
         // Advanced Threat Protection & Quantum-Ready Security
-        { key: 'insiderThreatDetaction', label: 'Insider Threat Detection' },
-        { key: 'uebaForDataAccess', label: 'UEBA For Data Access' },
+        { key: 'insiderThreatDetection', label: 'Insider Threat Detection' },
+        { key: 'uebaDataOperations', label: 'UEBA For Data Access' },
         { key: 'postQuantumCryptography', label: 'Post-Quantum Cryptography' },
         { key: 'cryptoAgility', label: 'Crypto Agility' },
+        { key: 'threatIntelligenceIntegration', label: 'Threat Intelligence Integration & Sharing' },
+        { key: 'ransomwareDataExtortionDefense', label: 'Ransomware & Data Extortion Defenses' },
+        { key: 'deceptionTechnologiesData', label: 'Deception Technologies (Honeytokens for Data)' },
+        { key: 'homomorphicConfidentialComputing', label: 'Homomorphic Encryption / Confidential Computing' },
+        { key: 'cryptographicKeyLifecycle', label: 'Secure Cryptographic Key Lifecycle (Pre/Post-Quantum)' },
 
         // Data Democratisation vs Controlled Access
         { key: 'dataAccessGovernance', label: 'Data Access Governance' },
@@ -319,11 +422,25 @@ const convertEntriesToWorksheetData = (entries) => {
         { key: 'dataAccessBalancing', label: 'Data Access Balancing' },
         { key: 'dataLiteracyPrograms', label: 'Data Literacy Programs' },
         { key: 'controlledDataSharing', label: 'Controlled Data Sharing' },
+        { key: 'dataCatalogDiscovery', label: 'Data Catalog & Discovery Maturity' },
+        { key: 'dynamicDataMaskingSelfService', label: 'Dynamic Data Masking / Anonymisation for Self-Service' },
+        { key: 'dataAccessRequestWorkflow', label: 'Data Access Request & Approval Workflow' },
+        { key: 'dataUsageAnalytics', label: 'Data Usage Analytics & Monitoring' },
+        { key: 'dataEntitlementModel', label: 'Data Entitlement & Attribution Model' },
+        { key: 'dataAccessRecertification', label: 'Data Access Recertification & Review' },
 
         // Modern Data Security & Automation
         { key: 'dataDiscoveryAutomation', label: 'Data Discovery Automation' }, 
         { key: 'sensitiveDataScanning', label: 'Sensitive Data Scanning' }, 
         { key: 'contentBasedClassification', label: 'Content Based Classification' }, 
+        { key: 'dataSecurityPostureManagement', label: 'Data Security Posture Management (DSPM)' },
+        { key: 'dlpAutomation', label: 'Data Loss Prevention (DLP) Automation' },
+        { key: 'dataLabelingTaggingAutomation', label: 'Data Labeling & Tagging Automation' },
+        { key: 'dataPolicyEnforcementAutomation', label: 'Data Rights & Policy Enforcement Automation' },
+        { key: 'soarDataIncidents', label: 'Security Orchestration, Automation & Response (SOAR) for Data' },
+        { key: 'automatedComplianceReporting', label: 'Automated Compliance Reporting & Auditing' },
+        { key: 'automatedDataLifecycle', label: 'Automated Data Lifecycle Management' },
+        { key: 'apiSecurityDataFlowMonitoring', label: 'API Security & Data Flow Monitoring Automation' },
 
         // Data Governance & Management
         { key: 'dataLineageTracking', label: 'Data Lineage Tracking' },
@@ -334,6 +451,13 @@ const convertEntriesToWorksheetData = (entries) => {
         { key: 'dataGovernanceFramework', label: 'Data Governance Framework' },
         { key: 'dataFlowDocumentation', label: 'Data Flow Documentation' },
         { key: 'reportingAnalyticsGovernance', label: 'Reporting Analytics Governance' },
+        { key: 'dataOwnershipAccountability', label: 'Data Ownership & Accountability Model' },
+        { key: 'dataStandardsConventions', label: 'Data Standards & Conventions' },
+        { key: 'dataGlossaryBusinessTerms', label: 'Data Glossary & Business Terminology Management' },
+        { key: 'dataGovernanceCouncil', label: 'Data Governance Council / Operating Model' },
+        { key: 'dataIssueExceptionManagement', label: 'Data Issue & Exception Management' },
+        { key: 'dataValueRoiMeasurement', label: 'Data Value & ROI Measurement' },
+        { key: 'dataEthicsResponsibleUse', label: 'Data Ethics & Responsible Use Policy' },
 
         // Implementation Notes
         { key: 'implementationNotes', label: 'Implementation Notes' },
@@ -347,6 +471,9 @@ const convertEntriesToWorksheetData = (entries) => {
     const dataRows = entries.map(entry => {
         return columns.map(col => {
             const value = entry[col.key];
+            if (Array.isArray(value)) {
+                return value.join(', ');
+            }
             return value || '';
         });
     });

@@ -5,7 +5,6 @@ const DCReport = ({ entries = [] }) => {
     const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, content: '' });
 
     const handleMouseEnter = (event, content) => {
-        const rect = event.currentTarget.getBoundingClientRect();
         setTooltip({
             visible: true,
             x: event.clientX,
@@ -47,6 +46,18 @@ const DCReport = ({ entries = [] }) => {
         return counts;
     }, {});
 
+    const sensitivityCounts = entries.reduce((counts, entry) => {
+        const sensitivity = entry.dataSensitivity || 'Unknown';
+        counts[sensitivity] = (counts[sensitivity] || 0) + 1;
+        return counts;
+    }, {});
+
+    const criticalityCounts = entries.reduce((counts, entry) => {
+        const criticality = entry.dataCriticality || 'Unknown';
+        counts[criticality] = (counts[criticality] || 0) + 1;
+        return counts;
+    }, {});
+
     const assetTypeCounts = entries.reduce((counts, entry) => {
         const assetType = entry.assetType || 'Unknown';
         counts[assetType] = (counts[assetType] || 0) + 1;
@@ -83,6 +94,18 @@ const DCReport = ({ entries = [] }) => {
         percentage: (count / entries.length) * 100
     }));
 
+    const sensitivityPercentages = Object.entries(sensitivityCounts).map(([sensitivity, count]) => ({
+        sensitivity,
+        count,
+        percentage: (count / entries.length) * 100
+    }));
+
+    const criticalityPercentages = Object.entries(criticalityCounts).map(([criticality, count]) => ({
+        criticality,
+        count,
+        percentage: (count / entries.length) * 100
+    }));
+
     // Create donut chart segments
     let cumulativePercentage = 0;
     const donutSegments = classificationPercentages.map(({ classification, count, percentage }) => {
@@ -100,6 +123,46 @@ const DCReport = ({ entries = [] }) => {
                    classification.toLowerCase() === 'internal' ? '#0099cc' :
                    classification.toLowerCase() === 'confidential' ? '#fbc02d' :
                    classification.toLowerCase() === 'restricted' ? '#7b1fa2' : '#ccc'
+        };
+    });
+
+    // Create sensitivity donut segments
+    let sensitivityCumulative = 0;
+    const sensitivitySegments = sensitivityPercentages.map(({ sensitivity, count, percentage }) => {
+        const startAngle = sensitivityCumulative * 3.6;
+        const endAngle = (sensitivityCumulative + percentage) * 3.6;
+        sensitivityCumulative += percentage;
+        
+        return {
+            sensitivity,
+            count,
+            percentage,
+            startAngle,
+            endAngle,
+            color: sensitivity.toLowerCase() === 'public' ? '#388e3c' :
+                   sensitivity.toLowerCase() === 'internal' ? '#0099cc' :
+                   sensitivity.toLowerCase() === 'confidential' ? '#fbc02d' :
+                   sensitivity.toLowerCase() === 'restricted' ? '#7b1fa2' : '#ccc'
+        };
+    });
+
+    // Create criticality donut segments
+    let criticalityCumulative = 0;
+    const criticalitySegments = criticalityPercentages.map(({ criticality, count, percentage }) => {
+        const startAngle = criticalityCumulative * 3.6;
+        const endAngle = (criticalityCumulative + percentage) * 3.6;
+        criticalityCumulative += percentage;
+        
+        return {
+            criticality,
+            count,
+            percentage,
+            startAngle,
+            endAngle,
+            color: criticality.toLowerCase() === 'public' ? '#388e3c' :
+                   criticality.toLowerCase() === 'internal' ? '#0099cc' :
+                   criticality.toLowerCase() === 'confidential' ? '#fbc02d' :
+                   criticality.toLowerCase() === 'restricted' ? '#7b1fa2' : '#ccc'
         };
     });
 
@@ -183,6 +246,158 @@ const DCReport = ({ entries = [] }) => {
                                             {classification === 'Confidential' && '🔒'}
                                             {classification === 'Restricted' && '🚫'}
                                             {' '}{classification}: {count} ({Math.round(percentage)}%)
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="dc-classification-breakdown">
+                        <h4>🔐 Sensitivity Breakdown (Confidentiality Impact)</h4>
+                        <div className="dc-donut-container">
+                            <div className="dc-donut-chart">
+                                <svg width="100%" height="100%" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
+                                    <circle
+                                        cx="100"
+                                        cy="100"
+                                        r="80"
+                                        fill="none"
+                                        stroke="#f0f0f0"
+                                        strokeWidth="40"
+                                    />
+                                    {sensitivityPercentages.length === 1 ? (
+                                        <circle
+                                            cx="100"
+                                            cy="100"
+                                            r="80"
+                                            fill="none"
+                                            stroke={sensitivitySegments[0].color}
+                                            strokeWidth="40"
+                                            style={{ cursor: 'pointer' }}
+                                            onMouseEnter={(e) => handleMouseEnter(e, `${sensitivitySegments[0].sensitivity}: ${sensitivitySegments[0].count} asset${sensitivitySegments[0].count !== 1 ? 's' : ''} (100%)`)}
+                                            onMouseLeave={handleMouseLeave}
+                                            onMouseMove={handleMouseMove}
+                                        />
+                                    ) : (
+                                        sensitivitySegments.map(({ sensitivity, percentage, color, count }, index) => {
+                                            const radius = 80;
+                                            const circumference = 2 * Math.PI * radius;
+                                            const strokeDasharray = `${(percentage / 100) * circumference} ${circumference}`;
+                                            const strokeDashoffset = -((sensitivitySegments.slice(0, index).reduce((sum, seg) => sum + seg.percentage, 0) / 100) * circumference);
+                                            
+                                            return (
+                                                <circle
+                                                    key={sensitivity}
+                                                    cx="100"
+                                                    cy="100"
+                                                    r={radius}
+                                                    fill="none"
+                                                    stroke={color}
+                                                    strokeWidth="40"
+                                                    strokeDasharray={strokeDasharray}
+                                                    strokeDashoffset={strokeDashoffset}
+                                                    transform="rotate(-90 100 100)"
+                                                    style={{ cursor: 'pointer' }}
+                                                    onMouseEnter={(e) => handleMouseEnter(e, `${sensitivity}: ${count} asset${count !== 1 ? 's' : ''} (${Math.round(percentage)}%)`)}
+                                                    onMouseLeave={handleMouseLeave}
+                                                    onMouseMove={handleMouseMove}
+                                                />
+                                            );
+                                        })
+                                    )}
+                                </svg>
+                                <div className="dc-donut-center">
+                                    <div className="dc-donut-total">{entries.length}</div>
+                                    <div className="dc-donut-label">Assets</div>
+                                </div>
+                            </div>
+                            <div className="dc-donut-legend">
+                                {sensitivityPercentages.map(({ sensitivity, count, percentage }) => (
+                                    <div key={sensitivity} className="dc-legend-item">
+                                        <span className={`dc-legend-color dc-${sensitivity.toLowerCase()}`}></span>
+                                        <span className="dc-legend-text">
+                                            {sensitivity === 'Public' && '🌐'}
+                                            {sensitivity === 'Internal' && '🏢'}
+                                            {sensitivity === 'Confidential' && '🔒'}
+                                            {sensitivity === 'Restricted' && '🚫'}
+                                            {' '}{sensitivity}: {count} ({Math.round(percentage)}%)
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="dc-classification-breakdown">
+                        <h4>⚡ Criticality Breakdown (Integrity & Availability Impact)</h4>
+                        <div className="dc-donut-container">
+                            <div className="dc-donut-chart">
+                                <svg width="100%" height="100%" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
+                                    <circle
+                                        cx="100"
+                                        cy="100"
+                                        r="80"
+                                        fill="none"
+                                        stroke="#f0f0f0"
+                                        strokeWidth="40"
+                                    />
+                                    {criticalityPercentages.length === 1 ? (
+                                        <circle
+                                            cx="100"
+                                            cy="100"
+                                            r="80"
+                                            fill="none"
+                                            stroke={criticalitySegments[0].color}
+                                            strokeWidth="40"
+                                            style={{ cursor: 'pointer' }}
+                                            onMouseEnter={(e) => handleMouseEnter(e, `${criticalitySegments[0].criticality}: ${criticalitySegments[0].count} asset${criticalitySegments[0].count !== 1 ? 's' : ''} (100%)`)}
+                                            onMouseLeave={handleMouseLeave}
+                                            onMouseMove={handleMouseMove}
+                                        />
+                                    ) : (
+                                        criticalitySegments.map(({ criticality, percentage, color, count }, index) => {
+                                            const radius = 80;
+                                            const circumference = 2 * Math.PI * radius;
+                                            const strokeDasharray = `${(percentage / 100) * circumference} ${circumference}`;
+                                            const strokeDashoffset = -((criticalitySegments.slice(0, index).reduce((sum, seg) => sum + seg.percentage, 0) / 100) * circumference);
+                                            
+                                            return (
+                                                <circle
+                                                    key={criticality}
+                                                    cx="100"
+                                                    cy="100"
+                                                    r={radius}
+                                                    fill="none"
+                                                    stroke={color}
+                                                    strokeWidth="40"
+                                                    strokeDasharray={strokeDasharray}
+                                                    strokeDashoffset={strokeDashoffset}
+                                                    transform="rotate(-90 100 100)"
+                                                    style={{ cursor: 'pointer' }}
+                                                    onMouseEnter={(e) => handleMouseEnter(e, `${criticality}: ${count} asset${count !== 1 ? 's' : ''} (${Math.round(percentage)}%)`)}
+                                                    onMouseLeave={handleMouseLeave}
+                                                    onMouseMove={handleMouseMove}
+                                                />
+                                            );
+                                        })
+                                    )}
+                                </svg>
+                                <div className="dc-donut-center">
+                                    <div className="dc-donut-total">{entries.length}</div>
+                                    <div className="dc-donut-label">Assets</div>
+                                </div>
+                            </div>
+                            <div className="dc-donut-legend">
+                                {criticalityPercentages.map(({ criticality, count, percentage }) => (
+                                    <div key={criticality} className="dc-legend-item">
+                                        <span className={`dc-legend-color dc-${criticality.toLowerCase()}`}></span>
+                                        <span className="dc-legend-text">
+                                            {criticality === 'Public' && '🌐'}
+                                            {criticality === 'Internal' && '🏢'}
+                                            {criticality === 'Confidential' && '🔒'}
+                                            {criticality === 'Restricted' && '🚫'}
+                                            {' '}{criticality}: {count} ({Math.round(percentage)}%)
                                         </span>
                                     </div>
                                 ))}
