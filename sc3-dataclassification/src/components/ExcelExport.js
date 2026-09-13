@@ -83,7 +83,6 @@ export const exportDCToExcel = (entries) => {
         });
         
     } catch (error) {
-        // eslint-disable-next-line no-console
         console.error('Error creating Excel export:', error);
         alert('An error occurred while creating the Excel file. Please try again.');
     }

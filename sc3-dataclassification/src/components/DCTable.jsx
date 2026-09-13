@@ -1,5 +1,4 @@
 import React from 'react';
-import { exportDCToExcel } from './ExcelExport';
 import "./DC.css";
 
 const DCTable = ({ 
@@ -39,8 +38,14 @@ const DCTable = ({
         );
     }
 
-    const handleExport = () => {
-        exportDCToExcel(entries);
+    const handleExport = async () => {
+        try {
+            const { exportDCToExcel } = await import('./ExcelExport');
+            exportDCToExcel(entries);
+        } catch (error) {
+            console.error('Failed to load export module:', error);
+            alert('Failed to load export module. Please try again.');
+        }
     };    
 
     const handleDragStart = (e, index) => {

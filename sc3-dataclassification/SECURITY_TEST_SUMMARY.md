@@ -2,7 +2,7 @@
 
 ## Overview
 
-I have created a comprehensive test suite for the security utilities in the SC3 Data Classification project. The test suite is designed to validate the core functionality of the data classification and restriction system.
+Provides a test suite for the security utilities in the SC3 Data Classification project. The test suite is designed to validate the core functionality of the data classification and restriction system.
 
 ## Files Created
 
